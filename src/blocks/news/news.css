@@ -1,0 +1,17 @@
+@import url(./__found/news__found.css);
+@import url(./__nonews/news__nonews.css);
+@import url(./__seaching/news__searching.css);
+
+.news {
+  margin: 0 auto;
+  max-width: 1440px;
+  background: #F5F6F7;
+  padding: 80px 104px;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 1150px) {
+.news {
+    padding: 40px;
+  }
+}

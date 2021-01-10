@@ -1,0 +1,232 @@
+.news__title {
+  font-family: 'RobotoSlab', 'Arial', sans-serif;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 46px;
+  margin: 0;
+  padding-bottom: 2px;
+}
+
+.news__cards {
+  padding-top: 62px;
+  display: grid;
+  grid-gap: 16px;
+  grid-template-columns: repeat(3, minmax(224px, 400px));
+  grid-template-rows: repeat(minmax(420px, 576px));
+}
+
+.news__card {
+  border-radius: 10px 10px 0 0;
+  position: relative;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.news__card-pic {
+  width: 100%;
+  max-width: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+  display: block;
+  border-radius: 10px 10px 0 0;
+}
+
+.news__caption {
+  border-radius: 0 0 10px 10px;
+  background: #fff;
+  height: 304px;
+  padding: 0 24px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: url(../../../images/svg/lapka.svg), auto;
+  box-sizing: border-box;
+}
+
+.news__card-utils {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  padding: 24px;
+  box-sizing: border-box;
+  width: 100%;
+  top: 0
+}
+
+.news__card-date {
+  font-family: 'SourceSansPro', 'Arial', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  color: #B6BCBF;
+  margin: 0;
+  padding-top: 20px;
+  box-sizing: border-box;
+}
+
+.news__card-title {
+  font-family: 'RobotoSlab', 'Arial', sans-serif;
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 30px;
+  color: #1A1B22;
+  margin: 0;
+  padding: 0;
+  max-height: 90px;
+  max-width: 352px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.news__card-text {
+  font-family: 'Roboto', 'Arial', sans-serif;
+  font-weight: 400;
+  height: 110px;
+  font-size: 16px;
+  line-height: 22px;
+  color: #1A1B22;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.news__card-src {
+  font-family: 'RobotoSlab', 'Arial', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  color: #B6BCBF;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.news__card-topic {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 8px 12px;
+  background: #FFFFFF;
+  color: black;
+  order: 0;
+  border-radius: 10px;
+  height: 40px;
+  font-family: 'Roboto', 'Arial', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  max-height: 24px;
+}
+
+.news__card-flag {
+  background: #fff;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  order: 3;
+  border: 0;
+  border-radius: 8px;
+  outline: none;
+  cursor: url(../../../images/svg/lapka.svg), auto;
+}
+
+.news__card-flag::before {
+  content: url(../../../images/svg/bookmark-w.svg);
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.news__card-flag:hover::before {
+  content: url(../../../images/svg/bookmark-b.svg);
+}
+
+.news__card-info {
+  color: black;
+  font-family: 'Roboto', 'Arial', sans-serif;
+  position: absolute;
+  right: 70px;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14px;
+  height: 40px;
+  background: white;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  opacity: 0;
+  z-index: 1;
+  box-shadow: 0px 10px 22px rgba(59, 74, 116, 0.1);
+  border-radius: 10px;
+  transition: opacity .3s;
+  padding: 0 12px;
+  order: 2;
+}
+
+.news__card-flag:hover+.news__card-info {
+  opacity: 1;
+}
+
+.news__found-button {
+  margin: 64px auto 0;
+  display: block;
+  padding: 18px 84px 21px;
+  font-family: 'Roboto', 'Arial', sans-serif;
+  background: #fff;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 24px;
+  border: 0;
+  box-sizing: border-box;
+  height: 64px;
+  outline: none;
+  border-radius: 80px;
+  cursor: url(../../../images/svg/lapka.svg), auto;
+}
+
+.news__found-button:hover {
+  opacity: .9;
+}
+
+@media screen and (max-width: 1250px) {
+  .news__caption {
+    padding: 0 8px 16px 8px;
+  }
+
+  .news__card-utils {
+    padding: 8px;
+  }
+
+  .news__card-info {
+    right: 55px;
+    width: 135px;
+  }
+
+  .news__card-title {
+    font-size: 22px;
+    line-height: 24px;
+    max-height: 110px;
+  }
+
+  .news__card-date {
+    padding-top: 16px;
+  }
+
+  .news__found-button {
+    margin: 22px auto 0;
+    padding: 15px 60px 17px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .news__cards {
+    grid-gap: 8px;
+    padding-top: 32px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .news__cards {
+    grid-template-columns: repeat(auto-fit, minmax(224px, 1fr));
+  }
+}

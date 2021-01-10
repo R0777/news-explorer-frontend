@@ -1,0 +1,41 @@
+.popup__save {
+  font-family: 'Roboto', 'Arial', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 24px;
+  background: #2F71E5;
+  box-shadow: 0px 5px 15px rgba(14, 26, 57, 0.2);
+  border-radius: 100px;
+  width: 100%;
+  outline: none;
+  text-align: center;
+  color: #fff;
+  box-sizing: border-box;
+  margin-top: 39px;
+  padding: 20px 76px;
+  transition: background .3s ease-in-out;
+  border: 0;
+}
+
+.popup__save:hover {
+  background: #347EFF;
+  transition: background .3s ease-in-out;
+  cursor: url(../../../images/svg/lapka.svg), auto;
+}
+
+.popup__save:active {
+  background: #2A65CC;
+}
+
+.popup__save-inactive {
+  
+  pointer-events: none;
+}
+
+@media screen and (max-width: 400px) {
+  .popup__save {
+    font-size: 14px;
+    line-height: 17px;
+    margin-top: 36px;
+  }
+}
