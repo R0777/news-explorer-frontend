@@ -143,6 +143,7 @@
     top: 71px;
     left: 0;
   }
+
   .search__input {
     width: 250px
   }
@@ -153,6 +154,7 @@
     background: url(../../images/jpg/bg-mobile.jpg) no-repeat;
     background-position: center 83%;
   }
+
   .search__title {
     padding: 30px 0 0 0;
   }

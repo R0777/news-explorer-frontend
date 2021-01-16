@@ -34,9 +34,9 @@
   align-items: center;
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 536px) {
   .popup {
-    padding: 0 20px;
+    padding: 0;
   }
 }
 

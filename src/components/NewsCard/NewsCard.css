@@ -1,20 +1,3 @@
-.news__title {
-  font-family: 'RobotoSlab', 'Arial', sans-serif;
-  font-weight: 400;
-  font-size: 40px;
-  line-height: 46px;
-  margin: 0;
-  padding-bottom: 2px;
-}
-
-.news__cards {
-  padding-top: 62px;
-  display: grid;
-  grid-gap: 16px;
-  grid-template-columns: repeat(3, minmax(224px, 400px));
-  grid-template-rows: repeat(minmax(420px, 576px));
-}
-
 .news__card {
   border-radius: 10px 10px 0 0;
   position: relative;
@@ -39,7 +22,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  cursor: url(../../../images/svg/lapka.svg), auto;
+  cursor: url(../../images/svg/lapka.svg), auto;
   box-sizing: border-box;
 }
 
@@ -127,18 +110,18 @@
   border: 0;
   border-radius: 8px;
   outline: none;
-  cursor: url(../../../images/svg/lapka.svg), auto;
+  cursor: url(../../images/svg/lapka.svg), auto;
 }
 
 .news__card-flag::before {
-  content: url(../../../images/svg/bookmark-w.svg);
+  content: url(../../images/svg/bookmark-w.svg);
   position: absolute;
   top: 8px;
   right: 8px;
 }
 
 .news__card-flag:hover::before {
-  content: url(../../../images/svg/bookmark-b.svg);
+  content: url(../../images/svg/bookmark-b.svg);
 }
 
 .news__card-info {
@@ -167,27 +150,6 @@
   opacity: 1;
 }
 
-.news__found-button {
-  margin: 64px auto 0;
-  display: block;
-  padding: 18px 84px 21px;
-  font-family: 'Roboto', 'Arial', sans-serif;
-  background: #fff;
-  font-weight: 500;
-  font-size: 18px;
-  line-height: 24px;
-  border: 0;
-  box-sizing: border-box;
-  height: 64px;
-  outline: none;
-  border-radius: 80px;
-  cursor: url(../../../images/svg/lapka.svg), auto;
-}
-
-.news__found-button:hover {
-  opacity: .9;
-}
-
 @media screen and (max-width: 1250px) {
   .news__caption {
     padding: 0 8px 16px 8px;
@@ -210,31 +172,5 @@
 
   .news__card-date {
     padding-top: 16px;
-  }
-
-  .news__found-button {
-    margin: 22px auto 0;
-    padding: 15px 60px 17px;
-  }
-}
-
-@media screen and (max-width: 800px) {
-  .news__cards {
-    grid-gap: 8px;
-    padding-top: 32px;
-  }
-}
-
-@media screen and (max-width: 767px) {
-  .news__cards {
-    grid-template-columns: repeat(auto-fit, minmax(224px, 1fr));
-  }
-}
-
-@media screen and (max-width: 536px) {
-  .news__found-button {
-    width: 100%;
-    padding: 15px 0 17px;
-    margin: 22px auto 32px;
   }
 }

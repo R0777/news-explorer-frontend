@@ -1,28 +1,3 @@
-.header {
-  padding: 0 104px;
-  background: url(../../images/jpg/bg.jpg);
-  background-position: top;
-  overflow: auto;
-  margin: 0 auto;
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1440px;
-  box-sizing: border-box;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.header__logo {
-  font-family: 'RobotoSlab', 'Arial', sans-serif;
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 24px;
-  cursor: url(../../images/svg/lapka.svg), auto;
-  margin: 0;
-  width: 200px;
-}
-
 .header__nav {
   font-family: 'Roboto', 'Arial', sans-serif;
   display: flex;
@@ -92,17 +67,7 @@
   display: none;
 }
 
-@media screen and (max-width: 1150px) {
-  .header {
-    padding: 0 40px;
-  }
-}
-
 @media screen and (max-width: 768px) {
-  .header {
-    background: url(../../images/jpg/bg-tablet.jpg);
-    background-position: top;
-  }
 
   .header__nav-link {
     padding: 21px 0 20px 0;
@@ -121,11 +86,6 @@
 }
 
 @media screen and (max-width: 710px) {
-
-  .header__logo {
-    padding: 21px 0 20px 0;
-    z-index: 1;
-  }
 
   .header__btn-menu {
     display: flex;
@@ -194,9 +154,6 @@
 }
 
 @media screen and (max-width: 536px) {
-  .header {
-    padding: 0 16px;
-  }
 
   .header__nav-link {
     padding: 0;
@@ -230,12 +187,12 @@
 }
 
 @media screen and (max-width: 320px) {
-  .header {
-    background: url(../../images/jpg/bg-mobile.jpg) no-repeat;
-  }
-  .header__nav-link, .header__nav-button {
+
+  .header__nav-link,
+  .header__nav-button {
     margin-top: 29px;
   }
+
   .header__nav-links {
     min-width: 320px;
   }

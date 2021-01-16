@@ -20,11 +20,11 @@
   transition: opacity .3s ease-in-out;
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 536px) {
   .popup__close {
-    width: 45px;
-    height: 45px;
-    top: -40px;
-    right: -40px;
+    width: 24px;
+    height: 24px;
+    top: -45px;
+    right: 20px;
   }
 }
