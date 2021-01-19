@@ -51,6 +51,12 @@
   }
 }
 
+@media screen and (max-width: 1150px) {
+  .news {
+    padding: 40px
+  }
+}
+
 @media screen and (max-width: 800px) {
   .news__cards {
     grid-gap: 8px;
@@ -69,5 +75,8 @@
     width: 100%;
     padding: 15px 0 17px;
     margin: 22px auto 32px;
+  }
+  .news {
+    padding: 32px 16px
   }
 }

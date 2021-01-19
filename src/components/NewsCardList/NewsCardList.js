@@ -26,7 +26,11 @@ const NewsCardList = (props) => {
           <div className="news__found">
             <h2 className="news__title">Результаты поиска</h2>
             <div className="news__cards">
-                {items.map(card => <NewsCard key={card._id} myId={currentUserContext._id} {...card} {...props}/>)}
+                <NewsCard />
+                <NewsCard />
+                <NewsCard />
+                <NewsCard />
+                <NewsCard />
             </div>
           </div>
         </section>

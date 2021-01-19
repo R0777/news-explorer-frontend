@@ -8,6 +8,9 @@ import SavedNews from '../SavedNews/SavedNews'
 import NewsCardList from '../NewsCardList/NewsCardList'
 import About from '../About/About'
 import Footer from '../Footer/Footer';
+import Popup from '../Popup/Popup';
+import RegistrPopup from '../RegistrPopup/RegistrPopup';
+import LoginPopup from '../LoginPopup/LoginPopup';
 //import * as auth from '../utils/auth.js';
 //import { getToken, setToken } from '../utils/token';
 import {api} from '../../utils/api.js';
@@ -15,7 +18,9 @@ import {CurrentUserContext} from '../../contexts/CurrentUserContext'
 import {CurrentCardContext} from '../../contexts/CurrentCardContext'
 
 const App = () => {
+
     const [loggedIn, setLoggedIn] = useState(true);
+    const [location, setLocation] = useState('/');
     // const [userData, setUserData] = useState({ email: '', password: ''});
     // const [path, setPath] = useState('/signup');
     // const [text, setText] = useState('Регистрация');
@@ -81,12 +86,12 @@ const App = () => {
 
     // }, []);
 
-    const [isEditProfilePopupOpen,
-        setIsEditProfilePopupOpen] = React.useState(false);
-    const [isAddPlacePopupOpen,
-        setIsAddPlacePopupOpen] = React.useState(false);
-    const [isEditAvatarPopupOpen,
-        setIsEditAvatarPopupOpen] = React.useState(false);
+    const [isAcceptPopupOpen,
+        setIsAcceptPopupOpen] = React.useState(false);
+    const [isRegistrPopupOpen,
+        setIsRegistrPopupOpen] = React.useState(false);
+    const [isLoginPopupOpen,
+        setIsLoginPopupOpen] = React.useState(false);
     const [isTrashOpen,
         setIsTrashOpen] = React.useState(false);
     const [isTooltipOpen,
@@ -141,17 +146,20 @@ const App = () => {
     //         });
     // }
 
-    // function handleEditAvatarClick() {
-    //     setIsEditAvatarPopupOpen(true)
-    // }
+    function handleAcceptPopupClick() {
+      closeAllPopups()
+      setIsAcceptPopupOpen(true)
+    }
 
-    // function handleEditProfileClick() {
-    //     setIsEditProfilePopupOpen(true)
-    // }
+    function handleRegistrPopupClick() {
+      closeAllPopups()
+      setIsRegistrPopupOpen(true)
+    }
 
-    // function handleAddPlaceClick() {
-    //     setIsAddPlacePopupOpen(true)
-    // }
+    function handleLoginPopupClick() {
+      closeAllPopups()
+      setIsLoginPopupOpen(true)
+    }
 
     // function handleTrashClick() {
     //     setIsTrashOpen(true)
@@ -165,14 +173,27 @@ const App = () => {
     //     setTooltipOpen(true)
     // }
 
-    // function closeAllPopups() {
-    //     setIsAddPlacePopupOpen(false)
-    //     setIsEditProfilePopupOpen(false)
-    //     setIsEditAvatarPopupOpen(false)
-    //     setIsTrashOpen(false)
-    //     setTooltipOpen(false)
-    //     setIsSelectedCard()
-    // }
+    function handleLocation() {
+      const location = window.location.pathname
+      if (location === '/')
+        setLocation(location)
+      else setLocation('/saved-news')
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      closeAllPopups()
+      handleAcceptPopupClick()
+    }
+
+    function closeAllPopups() {
+      setIsAcceptPopupOpen(false)
+      setIsRegistrPopupOpen(false)
+      setIsLoginPopupOpen(false)
+        // setIsTrashOpen(false)
+        // setTooltipOpen(false)
+        // setIsSelectedCard()
+    }
 
     // function handleUpdateUser({name, about}) {
     //     api.setProfile(name, about)
@@ -261,23 +282,63 @@ const App = () => {
                 <>
                     
                     <Header 
-                    loggedIn={loggedIn}/>
+                    loggedIn={loggedIn}
+                    location={location}
+                    handleLocation={handleLocation}
+                    onLoginPopup={handleLoginPopupClick}
+                    name="Грета" />
                     <main>
                     <Switch>
 
-                    <Route path="/">                    
-                      <SearchForm />
-                      <NewsCardList />
-                    </Route>
-
                     <ProtectedRoute 
-                        path="/saved-news"
-                        component={SavedNews} 
-                        link="" />
+                    path="/saved-news"
+                    loggedIn={loggedIn}
+                    component={SavedNews} 
+                    link="" />
+
+                    <Route path="/">                    
+                    <SearchForm />
+                    <NewsCardList />
+                    <About />
+                    </Route>
+                    <Route>
+                        {loggedIn && <Redirect to="/" /> }
+                    </Route>
                     </Switch>
-                        <About />
-                        </main>
-                        <Footer />
+                        
+                    </main>
+                    <Popup
+                        title="Пользователь успешно зарегистрирован!"
+                        id="accept"
+                        afterLink="Войти"
+                        isOpen={isAcceptPopupOpen}
+                        isClose={closeAllPopups}
+                        handleAfterLink={handleLoginPopupClick} />
+
+                    <RegistrPopup
+                        title="Регистрация"
+                        id="registr"
+                        afterLink="Войти"
+                        afterText="или "
+                        buttonText={'Зарегистрироваться'}
+                        isOpen={isRegistrPopupOpen}
+                        isClose={closeAllPopups}
+                        handleAfterLink={handleLoginPopupClick}
+                        onRegister={handleRegister} />
+                        
+                    <LoginPopup
+                        title="Вход"
+                        id="login"
+                        afterLink="Зарегистрироваться"
+                        afterText="или "
+                        buttonText={'Войти'}
+                        isOpen={isLoginPopupOpen}
+                        isClose={closeAllPopups}
+                        handleAfterLink={handleRegistrPopupClick}
+                        onRegister={handleRegister}
+                        />
+                    <Footer 
+                    handleLocation={handleLocation}/>
                 </>
             </CurrentUserContext.Provider>
         </CurrentCardContext.Provider>

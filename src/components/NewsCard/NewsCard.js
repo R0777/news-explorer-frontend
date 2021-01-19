@@ -1,10 +1,11 @@
 import React from 'react';
+import img from '../../images/jpg/img1.jpg'
 import './NewsCard.css'
 
 const NewsCard = () => {
     return (
       <figure className="news__card">
-        <img src="./images/jpg/img1.jpg" alt="" className="news__card-pic" />
+        <img src={img} alt="" className="news__card-pic" />
           <div className="news__card-utils">
             <p className="news__card-topic">Природа</p>
             <button className="news__card-flag"></button>
