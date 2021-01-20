@@ -7,7 +7,8 @@ const Header = (props) => {
 
     return (
 <header className={props.location === '/'? 'header': 'header header__white'}>
-    <p className="header__logo" onClick={props.handleLocation}><Link to="/" className="header__link">NewsExplorer</Link></p>
+
+    <p className={props.checked ? 'header__logo-white' : 'header__logo'} onClick={props.handleLocation}><Link to="/" className="header__link">NewsExplorer</Link></p>
     <Navigation {...props} />
   </header>
     );

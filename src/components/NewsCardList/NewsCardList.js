@@ -32,6 +32,7 @@ const NewsCardList = (props) => {
                 <NewsCard />
                 <NewsCard />
             </div>
+            <button className="news__found-button">Показать еще</button>
           </div>
         </section>
     );

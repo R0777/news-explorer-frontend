@@ -2,10 +2,10 @@ import React from 'react';
 import img from '../../images/jpg/img1.jpg'
 import './NewsCard.css'
 
-const NewsCard = () => {
+const NewsCard = (props) => {
     return (
       <figure className="news__card">
-        <img src={img} alt="" className="news__card-pic" />
+        <img src={img} alt="Национальное достояние – парки" className="news__card-pic" />
           <div className="news__card-utils">
             <p className="news__card-topic">Природа</p>
             <button className="news__card-flag"></button>

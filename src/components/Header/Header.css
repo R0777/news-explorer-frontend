@@ -28,6 +28,16 @@
   width: 200px;
 }
 
+.header__logo-white {
+  font-family: 'RobotoSlab', 'Arial', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  margin: 0;
+  width: 200px;
+  color: #fff;
+}
+
 .header__link {
   text-decoration: none;
   color: inherit;
@@ -45,11 +55,17 @@
     background: url(../../images/jpg/bg-tablet.jpg);
     background-position: top;
   }
+  .header__white {
+    background: white;
+  }
+  #header__btn-burger:checked~.header__logo, #header__btn-burger:checked~.header__logo-white {
+    color: #fff;
+  }
 }
 
 @media screen and (max-width: 710px) {
 
-  .header__logo {
+  .header__logo, .header__logo-white {
     padding: 21px 0 20px 0;
     z-index: 1;
   }
@@ -65,5 +81,8 @@
 @media screen and (max-width: 320px) {
   .header {
     background: url(../../images/jpg/bg-mobile.jpg) no-repeat;
+  }
+  .header__white {
+    background: white;
   }
 }

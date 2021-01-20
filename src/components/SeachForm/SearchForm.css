@@ -52,6 +52,11 @@
   font-size: 16px;
   line-height: 22px;
   outline: none;
+  opacity: 0.2;
+}
+
+.search__input:focus {
+  opacity: 1;
 }
 
 .search__button {

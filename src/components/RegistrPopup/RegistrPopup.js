@@ -19,36 +19,36 @@ const RegistrPopup = (props) => {
               <input 
                 type="email" 
                 className="popup__input popup__input_email" 
-                id='email-input' 
+                id='registr-email' 
                 name="email"
                 placeholder="Введите свой email"  
                 minLength="2" 
                 maxLength="40" 
                 required />
-              <span className='popup__input-error' id='email-input-error'></span>
+              <span className='popup__input-error' id='registr-email-error'></span>
           </label>
           <label className="popup__field">Пароль
               <input 
                 type="password" className="popup__input popup__input_pass" 
-                id='pass-input' 
+                id='registr-pass' 
                 name="password"
                 placeholder="Введите пароль" 
                 minLength="2" 
                 maxLength="40" 
                 required />
-              <span className='popup__input-error' id='pass-input-error'></span>
+              <span className='popup__input-error' id='registr-pass-error'></span>
           </label>
           <label className="popup__field">Имя
               <input 
                 type="text" 
                 className="popup__input popup__input_name" 
-                id='name-input' 
+                id='registr-name' 
                 name="name"
                 placeholder="Введите своё имя" 
                 minLength="2" 
                 maxLength="200" 
                 required />
-              <span className='popup__input-error' id='name-input-error'></span>
+              <span className='popup__input-error' id='registr-name-error'></span>
             </label>
         </Popup>
     );

@@ -19,24 +19,24 @@ const LoginPopup = (props) => {
               <input 
                 type="email" 
                 className="popup__input popup__input_email" 
-                id='email-input' 
+                id='login-email' 
                 name="email"
                 placeholder="Введите свой email" 
                 minLength="2" 
                 maxLength="40" 
                 required />
-              <span className='popup__input-error' id='email-input-error'></span>
+              <span className='popup__input-error' id='login-email-error'></span>
           </label>
           <label className="popup__field">Пароль
               <input 
                 type="password" className="popup__input popup__input_pass" 
-                id='pass-input' 
+                id='login-pass' 
                 name="password"
                 placeholder="Введите пароль"
                 minLength="2" 
                 maxLength="40" 
                 required />
-              <span className='popup__input-error' id='pass-input-error'></span>
+              <span className='popup__input-error' id='login-pass-error'></span>
           </label>
 
 </Popup>

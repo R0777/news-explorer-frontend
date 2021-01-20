@@ -21,6 +21,7 @@ const App = () => {
 
     const [loggedIn, setLoggedIn] = useState(true);
     const [location, setLocation] = useState('/');
+    const [input, setInput] = useState(false);
     // const [userData, setUserData] = useState({ email: '', password: ''});
     // const [path, setPath] = useState('/signup');
     // const [text, setText] = useState('Регистрация');
@@ -147,18 +148,18 @@ const App = () => {
     // }
 
     function handleAcceptPopupClick() {
-      closeAllPopups()
-      setIsAcceptPopupOpen(true)
+    closeAllPopups()
+    setIsAcceptPopupOpen(true)
     }
 
     function handleRegistrPopupClick() {
-      closeAllPopups()
-      setIsRegistrPopupOpen(true)
+    closeAllPopups()
+    setIsRegistrPopupOpen(true)
     }
 
     function handleLoginPopupClick() {
-      closeAllPopups()
-      setIsLoginPopupOpen(true)
+    closeAllPopups()
+    setIsLoginPopupOpen(true)
     }
 
     // function handleTrashClick() {
@@ -174,22 +175,28 @@ const App = () => {
     // }
 
     function handleLocation() {
-      const location = window.location.pathname
-      if (location === '/')
+    const location = window.location.pathname
+    if (location === '/')
         setLocation(location)
-      else setLocation('/saved-news')
+    else setLocation('/saved-news')
+    }
+
+    function handleCheck() {
+        if(input === true)
+            setInput(false)
+        else setInput(true)
     }
 
     function handleRegister(e) {
-      e.preventDefault();
-      closeAllPopups()
-      handleAcceptPopupClick()
+    e.preventDefault();
+    closeAllPopups()
+    handleAcceptPopupClick()
     }
 
     function closeAllPopups() {
-      setIsAcceptPopupOpen(false)
-      setIsRegistrPopupOpen(false)
-      setIsLoginPopupOpen(false)
+    setIsAcceptPopupOpen(false)
+    setIsRegistrPopupOpen(false)
+    setIsLoginPopupOpen(false)
         // setIsTrashOpen(false)
         // setTooltipOpen(false)
         // setIsSelectedCard()
@@ -286,6 +293,8 @@ const App = () => {
                     location={location}
                     handleLocation={handleLocation}
                     onLoginPopup={handleLoginPopupClick}
+                    handleCheck={handleCheck}
+                    checked={input}
                     name="Грета" />
                     <main>
                     <Switch>

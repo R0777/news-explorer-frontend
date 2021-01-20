@@ -7,7 +7,6 @@ const Navigation = (props) => {
     const display = {
       display: 'block',
     }
-
     const displayNon = {
       display: 'none',
     }
@@ -15,7 +14,7 @@ const Navigation = (props) => {
     return (
       <nav className="header__nav">
         <input id="header__btn-burger" type="checkbox" />
-        <label className="header__btn-menu" htmlFor="header__btn-burger">
+        <label onClick={props.handleCheck} className={props.location === '/saved-news'? 'header__btn-menu-blacked': 'header__btn-menu'} htmlFor="header__btn-burger">
         <span></span>
         </label>
           <ul className="header__nav-links">

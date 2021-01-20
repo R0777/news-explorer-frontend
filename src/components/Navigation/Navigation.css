@@ -36,11 +36,18 @@
   left: 0;
   right: 0;
   height: 3px;
-  background-color: #fff;
+  background: #fff;
 }
 
 .header__nav-link_blacked:hover::after {
-  background-color: #000;
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #000;
 }
 
 .header__nav-button {
@@ -102,7 +109,11 @@
 
 @media screen and (max-width: 710px) {
 
-  .header__btn-menu {
+  .header__nav-link:hover::after {
+    display: none;
+  }
+
+  .header__btn-menu, .header__btn-menu-blacked {
     display: flex;
     align-items: center;
     position: absolute;
@@ -124,7 +135,18 @@
     transition: all .2s linear;
   }
 
-  .header__btn-menu>span::after {
+  .header__btn-menu-blacked>span,
+  .header__btn-menu-blacked>span::after {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    top: 4px;
+    background-color: #000;
+    transition: all .2s linear;
+  }
+
+  .header__btn-menu>span::after, .header__btn-menu-blacked>span::after {
     content: '';
     top: 8px;
   }
@@ -149,12 +171,16 @@
     color: #fff;
   }
 
-  #header__btn-burger:checked~.header__btn-menu>span {
+  #header__btn-burger:checked~.header__btn-menu-blacked>span, #header__btn-burger:checked~.header__btn-menu-blacked>span::after {
+    background-color: #fff;
+  } 
+
+  #header__btn-burger:checked~.header__btn-menu>span, #header__btn-burger:checked~.header__btn-menu-blacked>span {
     transform: rotate(45deg);
     transition: all .2s linear;
   }
 
-  #header__btn-burger:checked~.header__btn-menu>span::after {
+  #header__btn-burger:checked~.header__btn-menu>span::after, #header__btn-burger:checked~.header__btn-menu-blacked>span::after {
     top: 0;
     transform: rotate(90deg);
     transition: all .2s linear;
@@ -166,6 +192,15 @@
     transition: opacity .3s ease-in-out;
     left: 0;
   }
+  .header__nav-button {
+    color: white;
+    border-color: white;
+  }
+  
+  .header__nav-button::after {
+    background: url(../../images/svg/logout-w.svg) no-repeat;
+  }
+
 }
 
 @media screen and (max-width: 536px) {
@@ -174,7 +209,7 @@
     padding: 0;
   }
 
-  .header__btn-menu {
+  .header__btn-menu, .header__btn-menu-blacked {
     right: 16px;
   }
 }
