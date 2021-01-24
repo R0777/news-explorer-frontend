@@ -1,31 +1,7 @@
-.header {
-  padding: 0 104px;
-  background: url(../../images/jpg/bg.jpg);
-  background-position: top;
-  overflow: auto;
-  margin: 0 auto;
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1440px;
-  box-sizing: border-box;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.header__logo {
-  font-family: 'RobotoSlab', 'Arial', sans-serif;
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 24px;
-  cursor: url(../../images/svg/lapka.svg), auto;
-  margin: 0;
-  width: 200px;
-}
-
 .header__nav {
   font-family: 'Roboto', 'Arial', sans-serif;
   display: flex;
+  color: inherit;
   font-weight: 500;
   font-size: 18px;
   line-height: 24px;
@@ -43,7 +19,7 @@
 
 .header__nav-link {
   display: block;
-  color: #fff;
+  color: inherit;
   position: relative;
   text-decoration: none;
   margin-left: 34px;
@@ -60,22 +36,33 @@
   left: 0;
   right: 0;
   height: 3px;
-  background-color: #fff;
+  background: #fff;
+}
+
+.header__nav-link_blacked:hover::after {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #000;
 }
 
 .header__nav-button {
   margin: 0;
-  color: #fff;
-  width: 112px;
+  color: inherit;
   padding: 12px 37px 12px 19px;
   background: none;
   margin-left: 32px;
-  border: 1px solid #FFFFFF;
+  border: 1px solid;
   box-sizing: border-box;
   border-radius: 100px;
   position: relative;
   cursor: url(../../images/svg/lapka.svg), auto;
   outline: none;
+  border-color: inherit;
 }
 
 .header__nav-button::after {
@@ -85,24 +72,24 @@
   height: 24px;
   background: url(../../images/svg/logout-w.svg) no-repeat;
   top: 10px;
-  right: 15px;
+  right: 10px;
+}
+
+.header__nav-button-w::after {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: url(../../images/svg/logout-b.svg) no-repeat;
+  top: 10px;
+  right: 10px;
 }
 
 #header__btn-burger {
   display: none;
 }
 
-@media screen and (max-width: 1150px) {
-  .header {
-    padding: 0 40px;
-  }
-}
-
 @media screen and (max-width: 768px) {
-  .header {
-    background: url(../../images/jpg/bg-tablet.jpg);
-    background-position: top;
-  }
 
   .header__nav-link {
     padding: 21px 0 20px 0;
@@ -116,18 +103,17 @@
 
   .header__nav-button::after {
     top: 6px;
-    right: 12px;
+    right: 6px;
   }
 }
 
 @media screen and (max-width: 710px) {
 
-  .header__logo {
-    padding: 21px 0 20px 0;
-    z-index: 1;
+  .header__nav-link:hover::after {
+    display: none;
   }
 
-  .header__btn-menu {
+  .header__btn-menu, .header__btn-menu-blacked {
     display: flex;
     align-items: center;
     position: absolute;
@@ -149,7 +135,18 @@
     transition: all .2s linear;
   }
 
-  .header__btn-menu>span::after {
+  .header__btn-menu-blacked>span,
+  .header__btn-menu-blacked>span::after {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    top: 4px;
+    background-color: #000;
+    transition: all .2s linear;
+  }
+
+  .header__btn-menu>span::after, .header__btn-menu-blacked>span::after {
     content: '';
     top: 8px;
   }
@@ -174,12 +171,16 @@
     color: #fff;
   }
 
-  #header__btn-burger:checked~.header__btn-menu>span {
+  #header__btn-burger:checked~.header__btn-menu-blacked>span, #header__btn-burger:checked~.header__btn-menu-blacked>span::after {
+    background-color: #fff;
+  } 
+
+  #header__btn-burger:checked~.header__btn-menu>span, #header__btn-burger:checked~.header__btn-menu-blacked>span {
     transform: rotate(45deg);
     transition: all .2s linear;
   }
 
-  #header__btn-burger:checked~.header__btn-menu>span::after {
+  #header__btn-burger:checked~.header__btn-menu>span::after, #header__btn-burger:checked~.header__btn-menu-blacked>span::after {
     top: 0;
     transform: rotate(90deg);
     transition: all .2s linear;
@@ -191,18 +192,24 @@
     transition: opacity .3s ease-in-out;
     left: 0;
   }
+  .header__nav-button {
+    color: white;
+    border-color: white;
+  }
+  
+  .header__nav-button::after {
+    background: url(../../images/svg/logout-w.svg) no-repeat;
+  }
+
 }
 
 @media screen and (max-width: 536px) {
-  .header {
-    padding: 0 16px;
-  }
 
   .header__nav-link {
     padding: 0;
   }
 
-  .header__btn-menu {
+  .header__btn-menu, .header__btn-menu-blacked {
     right: 16px;
   }
 }
@@ -219,7 +226,6 @@
   }
 
   .header__nav-button {
-    width: 288px;
     margin-top: 20px;
     padding: 15px 74px 17px;
   }
@@ -230,12 +236,12 @@
 }
 
 @media screen and (max-width: 320px) {
-  .header {
-    background: url(../../images/jpg/bg-mobile.jpg) no-repeat;
-  }
-  .header__nav-link, .header__nav-button {
+
+  .header__nav-link,
+  .header__nav-button {
     margin-top: 29px;
   }
+
   .header__nav-links {
     min-width: 320px;
   }

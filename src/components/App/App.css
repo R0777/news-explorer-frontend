@@ -1,0 +1,7 @@
+.page {
+  max-width: 1440px;
+  background: #E5E5E5;
+  margin: 0 auto;
+  min-width: 320px;
+  text-rendering: optimizeLegibility;
+}

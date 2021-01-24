@@ -17,6 +17,7 @@
   list-style: none;
   display: flex;
   flex-direction: row;
+
   margin: 0;
   padding: 0;
 }
@@ -26,12 +27,16 @@
 }
 
 .footer__link {
+  display: block;
+  text-decoration: none;
+  color: black;
   box-sizing: border-box;
   margin: 0 0 0 38px;
   cursor: url(../../images/svg/lapka.svg), auto;
 }
 
 .footer__link-social {
+  display: block;
   width: 20px;
   height: 20px;
   box-sizing: border-box;

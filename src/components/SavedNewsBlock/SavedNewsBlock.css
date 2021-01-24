@@ -1,0 +1,82 @@
+.news {
+  margin: 0 auto;
+  max-width: 1440px;
+  background: #F5F6F7;
+  padding: 80px 104px;
+  box-sizing: border-box;
+}
+
+.news__title {
+  font-family: 'RobotoSlab', 'Arial', sans-serif;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 46px;
+  margin: 0;
+  padding-bottom: 2px;
+}
+
+.news__cards {
+  padding-top: 62px;
+  display: grid;
+  grid-gap: 16px;
+  grid-template-columns: repeat(3, minmax(224px, 400px));
+  grid-template-rows: repeat(minmax(420px, 576px));
+}
+
+.news__found-button {
+  margin: 64px auto 0;
+  display: block;
+  padding: 18px 84px 21px;
+  font-family: 'Roboto', 'Arial', sans-serif;
+  background: #fff;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 24px;
+  border: 0;
+  box-sizing: border-box;
+  height: 64px;
+  outline: none;
+  border-radius: 80px;
+  cursor: url(../../images/svg/lapka.svg), auto;
+}
+
+.news__found-button:hover {
+  opacity: .9;
+}
+
+@media screen and (max-width: 1250px) {
+  .news__found-button {
+    margin: 22px auto 0;
+    padding: 15px 60px 17px;
+  }
+}
+
+@media screen and (max-width: 1150px) {
+  .news {
+    padding: 40px
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .news__cards {
+    grid-gap: 8px;
+    padding-top: 32px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .news__cards {
+    grid-template-columns: repeat(auto-fit, minmax(224px, 1fr));
+  }
+}
+
+@media screen and (max-width: 536px) {
+  .news__found-button {
+    width: 100%;
+    padding: 15px 0 17px;
+    margin: 22px auto 32px;
+  }
+  .news {
+    padding: 32px 16px
+  }
+}
