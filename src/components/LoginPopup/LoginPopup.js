@@ -1,7 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Popup from '../Popup/Popup';
 
-const LoginPopup = (props) => {
+const LoginPopup = ({ handlAuthorize, ...props }) => {
+
+  const [data, setData] = useState({
+    email: '',
+    password: ''
+    });
+
+    const handleChange = (e) => {
+    const {name, value} = e.target;
+    setData((prevData) => ({
+        ...prevData,
+        [name]: value,
+    }));
+}
+    
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        handlAuthorize(data)
+    }
 
     return (
 <Popup
@@ -9,11 +27,10 @@ const LoginPopup = (props) => {
         id={props.id}
         afterLink={props.afterLink}
         afterText={props.afterText}
-        buttonText={props.buttonText}
         isOpen={props.isOpen}
         isClose={props.isClose}
         handleAfterLink={props.handleAfterLink}
-        onRegister={props.onRegister}
+        handleSubmit={handleSubmit}
         >
           <label className="popup__field">Email
               <input 
@@ -23,7 +40,8 @@ const LoginPopup = (props) => {
                 name="email"
                 placeholder="Введите свой email" 
                 minLength="2" 
-                maxLength="40" 
+                maxLength="40"
+                onChange={handleChange}
                 required />
               <span className='popup__input-error' id='login-email-error'></span>
           </label>
@@ -34,11 +52,12 @@ const LoginPopup = (props) => {
                 name="password"
                 placeholder="Введите пароль"
                 minLength="2" 
-                maxLength="40" 
+                maxLength="40"
+                onChange={handleChange}
                 required />
               <span className='popup__input-error' id='login-pass-error'></span>
           </label>
-
+          <button type="submit" className="popup__save">{props.buttonText}</button>
 </Popup>
     );
 }

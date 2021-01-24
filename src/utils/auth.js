@@ -1,14 +1,14 @@
 import { setToken } from './token.js';
 
-export const BASE_URL = 'https://api.r777.students.nomoredomains.work';
+export const BASE_URL = 'https://api.news.students.nomoredomains.work';
 
-export const register = (email, password) => {
-  return fetch(`${BASE_URL}/sign-up`, {
+export const register = (email, password, name) => {
+  return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({email, password})
+    body: JSON.stringify({email, password, name})
   })
   .then((res) => {
     return res
@@ -16,7 +16,7 @@ export const register = (email, password) => {
 };
 
 export const authorize = (email, password) => {
-  return fetch(`${BASE_URL}/sign-in`, {
+  return fetch(`${BASE_URL}/signin`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

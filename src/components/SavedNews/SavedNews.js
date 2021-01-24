@@ -2,11 +2,11 @@ import React from 'react';
 import SavedNewsHeader from '../SavedNewsHeader/SavedNewsHeader'
 import SavedNewsBlock from '../SavedNewsBlock/SavedNewsBlock'
 
-const SavedNews = () => {
+const SavedNews = (props) => {
     return (
 <>
-<SavedNewsHeader />
-<SavedNewsBlock />
+<SavedNewsHeader {...props} />
+<SavedNewsBlock {...props} />
 </>
     );
 }

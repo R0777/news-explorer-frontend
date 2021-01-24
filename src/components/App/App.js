@@ -11,81 +11,84 @@ import Footer from '../Footer/Footer';
 import Popup from '../Popup/Popup';
 import RegistrPopup from '../RegistrPopup/RegistrPopup';
 import LoginPopup from '../LoginPopup/LoginPopup';
-//import * as auth from '../utils/auth.js';
-//import { getToken, setToken } from '../utils/token';
+import * as auth from '../../utils/auth.js';
+import { getToken, setToken } from '../../utils/token';
 import {api} from '../../utils/api.js';
 import {CurrentUserContext} from '../../contexts/CurrentUserContext'
 import {CurrentCardContext} from '../../contexts/CurrentCardContext'
 
 const App = () => {
 
-    const [loggedIn, setLoggedIn] = useState(true);
+    const [loggedIn, setLoggedIn] = useState(false);
     const [location, setLocation] = useState('/');
     const [input, setInput] = useState(false);
-    // const [userData, setUserData] = useState({ email: '', password: ''});
-    // const [path, setPath] = useState('/signup');
-    // const [text, setText] = useState('Регистрация');
-    // const history = useHistory();
+    const [userData, setUserData] = useState({ name: '', email: ''});
+    const [path, setPath] = useState('/signup');
+    const [text, setText] = useState('Регистрация');
+    const history = useHistory();
 
-    // const handlePath = (path) => {
-    //     setPath(path);
-    // }
+    const handlePath = (path) => {
+        setPath(path);
+    }
 
-    // const handleText = (text) => {
-    //     setText(text);
-    // }
+    const handleText = (text) => {
+        setText(text);
+    }
 
-    // const handleLogin = (userData) => {
-    //     setUserData(userData);
-    //     setLoggedIn(true);
-    //     handleTooltip()
-    // }
+    const handleLogin = (userData) => {
+        console.log(userData)
+        // setUserData(userData);
+        setLoggedIn(true);
+        handleTooltip()
+    }
     
-    // const tokenCheck = () => {
-    //     const jwt = getToken();
-    //     if (!jwt) {
-    //     return;
-    //     }
-    //     auth.getContent(jwt).then((res) => {
+    const tokenCheck = () => {
+        const jwt = getToken();
+        if (!jwt) {
+        return;
+        }
+        auth.getContent(jwt).then((res) => {
             
-    //     if (res.email) {
-    //         const userData = { 
-    //         email: res.email,
-    //         }
-    //         setLoggedIn(true);
-    //         setUserData(userData);
-    //         history.push('/')
+        if (res.email) {
+            const userData = { 
+                name: res.name,   
+            email: res.email
+            }
+            setLoggedIn(true)
+            setUserData(userData)
+            // history.push('/')
 
-    //             Promise.all([
-    //                 api.getProfile(),
-    //                 api.getInitialCards()
-    //             ]).then(res => {
-    //                 const [profile, card] = res
-    //                 setCurrentUser(profile)
-    //                 setCurrentCards(card)
-    //             }).catch((err) => {
-    //                 console.log(err);
-    //             })
+                // Promise.all([
+                //     api.getProfile(),
+                //     api.getInitialCards()
+                // ]).then(res => {
+                //     const [profile, card] = res
+                //     setCurrentUser(profile)
+                //     setCurrentCards(card)
+                // })
+                .catch((err) => {
+                    console.log(err);
+                })
 
-    //     }
-    //     })
+        }
+        })
 
-    //     .catch((err) => {
-    //         console.log(err);
-    //     })
-    // }
+        .catch((err) => {
+            console.log(err);
+        })
+    }
 
-    // const signOut = () => {
-    //     localStorage.removeItem('jwt');
-    //     setLoggedIn(false);
-    //     history.push('/signin');
-    // }
+    const signOut = () => {
+        localStorage.removeItem('jwt');
+        setLoggedIn(false);
+        history.push('/');
+    }
     
-    //     useEffect(() => {
+        useEffect(() => {
 
-    //             tokenCheck();
+                tokenCheck();
 
-    // }, []);
+    }, []);
 
     const [isAcceptPopupOpen,
         setIsAcceptPopupOpen] = React.useState(false);
@@ -170,9 +173,10 @@ const App = () => {
     //     setIsSelectedCard(card)
     // }
 
-    // function handleTooltip() {
-    //     setTooltipOpen(true)
-    // }
+    function handleTooltip() {
+        closeAllPopups()
+        setTooltipOpen(true)
+    }
 
     function handleLocation() {
     const location = window.location.pathname
@@ -187,14 +191,8 @@ const App = () => {
         else setInput(true)
     }
 
-    function handleRegister(e) {
-    e.preventDefault();
-    closeAllPopups()
-    handleAcceptPopupClick()
-    }
-
     function closeAllPopups() {
-    setIsAcceptPopupOpen(false)
+        setTooltipOpen(false)
     setIsRegistrPopupOpen(false)
     setIsLoginPopupOpen(false)
         // setIsTrashOpen(false)
@@ -238,50 +236,45 @@ const App = () => {
         
     // }
 
-    // const handlRegister = (email, password) => {
+    const handlRegister = (email, password, name) => {
 
-    //     auth.register(email, password)
-    //         .then((res) => {
+        auth.register(email, password, name)
+            .then((res) => {
 
-    //             if ((res.status !== 401) && (res.status !== 400 ) && (res.status !== 409 )) {
-    //                 history.push('/signin') 
-    //             } else handleTooltip();
-    //         })
-    //         .catch((err) => {
-    //             console.log(err)
-    //             handleTooltip();
-    //             history.push('/signup');
-    //         });
-    // }
+                if ((res.status !== 401) && (res.status !== 400 ) && (res.status !== 409 )) {
+                    history.push('/') 
+                } else handleTooltip();
+            })
+            .catch((err) => {
+                console.log(err)
+            });
+    }
 
-    // const handlAuthorize = (data) => {
-    //     const { email, password } = data;
+    const handlAuthorize = (data) => {
+        const { email, password } = data;
 
-    //     if (!email || !password){
-    //         handleTooltip()
-    //         return;
-    //     }
+        if (!email || !password){
+            return;
+        }
 
-    //     auth.authorize(email, password)
-    //         .then((res) => {
-    //             if (!res){
-    //                 handleTooltip()
-    //             }
+        auth.authorize(email, password)
+            .then((res) => {
+                if (!res){
+                    handleTooltip()
+                }
     
-    //             if (res.token) {
-    //             setToken(res.token);
-    //             //setData({ email: '', password: ''});
-    //             handleLogin(data);
-    //             history.push('/');
-    //             }
-    //             else handleTooltip()
-    //         })
-    //         .then(() => tokenCheck())
-    //         .catch(err => {
-    //             handleTooltip()
-    //             console.log(err)
-    //         });
-    // }
+                if (res.token) {
+                setToken(res.token);
+                //setData({ email: '', password: ''});
+                handleLogin(data);
+                // history.push('/');
+                }
+            })
+            .then(() => tokenCheck())
+            .catch(err => {
+                console.log(err)
+            });
+    }
 
     return (
         <CurrentCardContext.Provider value={currentCards}>
@@ -294,8 +287,9 @@ const App = () => {
                     handleLocation={handleLocation}
                     onLoginPopup={handleLoginPopupClick}
                     handleCheck={handleCheck}
+                    signOut={signOut}
                     checked={input}
-                    name="Грета" />
+                    userData={userData} />
                     <main>
                     <Switch>
 
@@ -303,12 +297,14 @@ const App = () => {
                     path="/saved-news"
                     loggedIn={loggedIn}
                     component={SavedNews} 
+                    userData={userData}
                     link="" />
 
                     <Route path="/">                    
                     <SearchForm />
                     <NewsCardList />
-                    <About />
+                    <About 
+                    userData={userData} />
                     </Route>
                     <Route>
                         {loggedIn && <Redirect to="/" /> }
@@ -320,8 +316,9 @@ const App = () => {
                         title="Пользователь успешно зарегистрирован!"
                         id="accept"
                         afterLink="Войти"
-                        isOpen={isAcceptPopupOpen}
+                        isOpen={isTooltipOpen}
                         isClose={closeAllPopups}
+                        loggedIn={loggedIn}
                         handleAfterLink={handleLoginPopupClick} />
 
                     <RegistrPopup
@@ -333,7 +330,7 @@ const App = () => {
                         isOpen={isRegistrPopupOpen}
                         isClose={closeAllPopups}
                         handleAfterLink={handleLoginPopupClick}
-                        onRegister={handleRegister} />
+                        handlRegister={handlRegister} />
                         
                     <LoginPopup
                         title="Вход"
@@ -344,7 +341,7 @@ const App = () => {
                         isOpen={isLoginPopupOpen}
                         isClose={closeAllPopups}
                         handleAfterLink={handleRegistrPopupClick}
-                        onRegister={handleRegister}
+                        handlAuthorize={handlAuthorize}
                         />
                     <Footer 
                     handleLocation={handleLocation}/>
