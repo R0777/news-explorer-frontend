@@ -2,14 +2,14 @@ import React from 'react';
 import NewsCard from '../NewsCard/NewsCard';
 
 import {CurrentUserContext} from '../../contexts/CurrentUserContext'
-import {CurrentCardContext} from '../../contexts/CurrentCardContext'
+import {CurrentNewsContext} from '../../contexts/CurrentNewsContext'
 
 const SavedNewsBlock = (props) => {
 
     const currentUserContext = React.useContext(CurrentUserContext);
-    const currentCardContext = React.useContext(CurrentCardContext);
+    const currentNewsContext = React.useContext(CurrentNewsContext);
 
-    const items = currentCardContext.map(item => ({
+    const items = currentNewsContext.map(item => ({
         
         src: item.link,
         _id: item._id,

@@ -11,17 +11,18 @@ import Footer from '../Footer/Footer';
 import Popup from '../Popup/Popup';
 import RegistrPopup from '../RegistrPopup/RegistrPopup';
 import LoginPopup from '../LoginPopup/LoginPopup';
-import * as auth from '../../utils/auth.js';
+import * as auth from '../../utils/MainApi.js';
 import { getToken, setToken } from '../../utils/token';
-import {api} from '../../utils/api.js';
+import { newsApi } from '../../utils/NewsApi.js';
 import {CurrentUserContext} from '../../contexts/CurrentUserContext'
-import {CurrentCardContext} from '../../contexts/CurrentCardContext'
+import {CurrentNewsContext} from '../../contexts/CurrentNewsContext'
 
 const App = () => {
 
     const [loggedIn, setLoggedIn] = useState(false);
     const [location, setLocation] = useState('/');
     const [input, setInput] = useState(false);
+    const [searching, setSearching] = useState(false);
     const [userData, setUserData] = useState({ name: '', email: ''});
     const [path, setPath] = useState('/signup');
     const [text, setText] = useState('Регистрация');
@@ -36,8 +37,8 @@ const App = () => {
     }
 
     const handleLogin = (userData) => {
-        console.log(userData)
-        // setUserData(userData);
+
+        setUserData(userData);
         setLoggedIn(true);
         handleTooltip()
     }
@@ -104,8 +105,8 @@ const App = () => {
         setIsSelectedCard] = React.useState()
     const [currentUser,
         setCurrentUser] = React.useState({})
-    const [currentCards,
-        setCurrentCards] = React.useState([])
+    const [currentNews,
+        setCurrentNews] = React.useState([])
 
 
     
@@ -235,6 +236,16 @@ const App = () => {
     //         })
         
     // }
+const handlSearch = (search) => {
+  newsApi.getNews(search)
+  .then((res) => {
+    setCurrentNews(res)
+  })
+  .catch((err) => {
+    console.log(err)
+});
+}
+
 
     const handlRegister = (email, password, name) => {
 
@@ -277,7 +288,7 @@ const App = () => {
     }
 
     return (
-        <CurrentCardContext.Provider value={currentCards}>
+        <CurrentNewsContext.Provider value={currentNews}>
             <CurrentUserContext.Provider value={currentUser}>
                 <>
                     
@@ -301,7 +312,8 @@ const App = () => {
                     link="" />
 
                     <Route path="/">                    
-                    <SearchForm />
+                    <SearchForm
+                    handlSearch={handlSearch} />
                     <NewsCardList />
                     <About 
                     userData={userData} />
@@ -347,7 +359,7 @@ const App = () => {
                     handleLocation={handleLocation}/>
                 </>
             </CurrentUserContext.Provider>
-        </CurrentCardContext.Provider>
+        </CurrentNewsContext.Provider>
 
     );
 }
