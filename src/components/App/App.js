@@ -27,17 +27,7 @@ const App = () => {
     const [newsFound, setnewsFound] = useState(false);
     const [nonews, setNonews] = useState(false);
     const [userData, setUserData] = useState({ name: '', email: ''});
-    const [path, setPath] = useState('/signup');
-    const [text, setText] = useState('Регистрация');
     const history = useHistory();
-
-    const handlePath = (path) => {
-        setPath(path);
-    }
-
-    const handleText = (text) => {
-        setText(text);
-    }
 
     const handleLogin = (userData, token) => {
 
@@ -54,7 +44,10 @@ const App = () => {
     }
 
     const showSavedNews = () => {
-      const jwt = getToken();
+    const jwt = getToken();
+    if (!jwt) {
+        return;
+        }
         mainApi.getSavedNews(jwt)
         .then((res) => {
           setCurrentSavedNews(res)
@@ -108,19 +101,14 @@ const App = () => {
     //showSavedNews();
     }, []); 
 
-    const [isAcceptPopupOpen,
-        setIsAcceptPopupOpen] = React.useState(false);
+
     const [isRegistrPopupOpen,
         setIsRegistrPopupOpen] = React.useState(false);
     const [isLoginPopupOpen,
         setIsLoginPopupOpen] = React.useState(false);
-    const [isTrashOpen,
-        setIsTrashOpen] = React.useState(false);
     const [isTooltipOpen,
             setTooltipOpen] = React.useState(false);
     const [keyword, setKeyword] = useState('');
-    const [isSelectedCard,
-        setIsSelectedCard] = React.useState()
     const [currentSavedNews,
         setCurrentSavedNews] = React.useState([])
     const [currentNews,
@@ -138,9 +126,8 @@ const App = () => {
           return;
           }
             mainApi.saveNews(card, jwt)
-                .then((newCard) => {
-        
-                        showSavedNews()
+                .then((res) => {
+                    showSavedNews()
                 })
                 .catch((err) => {
                     console.log(err);
@@ -152,6 +139,9 @@ const App = () => {
 
     const handleDeleteCard = (card) => {
 const jwt = getToken()
+if (!jwt) {
+    return;
+    }
         mainApi.deleteNews(card._id, jwt)
             .then(res => {
                 const deletedCard = currentSavedNews.filter(el => el._id !== card._id)
@@ -160,11 +150,6 @@ const jwt = getToken()
             .catch((err) => {
                 console.log(err);
             });
-    }
-
-    function handleAcceptPopupClick() {
-    closeAllPopups()
-    setIsAcceptPopupOpen(true)
     }
 
     function handleRegistrPopupClick() {
