@@ -129,7 +129,9 @@ const App = () => {
 
     
     const handleSaveNews = (card) => {
-        const isSaved = (card.url === currentSavedNews.link);
+
+        const isSaved = currentSavedNews.find((elem) => elem.link === card.url);
+
         if (!isSaved) {
           const jwt = getToken();
           if (!jwt) {
@@ -137,29 +139,22 @@ const App = () => {
           }
             mainApi.saveNews(card, jwt)
                 .then((newCard) => {
-                    const newCards = currentSavedNews.map(c => c.link === card.url
-                        ? newCard
-                        : c);
-                        console.log(newCard)
-                    setCurrentNews(newCards);
-                    setCurrentSavedNews(newCard)
+        
+                        showSavedNews()
                 })
                 .catch((err) => {
                     console.log(err);
                 });
         } else {
-            mainApi.deleteNews(card._id)
-                .then((newCard) => {
-                    
-                    const newCards = currentSavedNews.map(c => c.link === card.url
-                        ? newCard
-                        : c);
-                    setCurrentNews(newCards);
-                    setCurrentSavedNews(newCard)
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+          const jwt = getToken()
+        mainApi.deleteNews(isSaved._id, jwt)
+            .then(res => {
+                const deletedCard = currentSavedNews.filter(el => el._id !== card._id)
+                setCurrentSavedNews(deletedCard)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
         }
     }
 
