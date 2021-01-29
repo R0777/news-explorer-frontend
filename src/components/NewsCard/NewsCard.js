@@ -1,25 +1,53 @@
 import React from 'react';
-import img from '../../images/jpg/img1.jpg'
+import { Link } from 'react-router-dom'
 import './NewsCard.css'
 
+const display = {
+  visibility: 'visible',
+}
+const displayNon = {
+  visibility: 'hidden',
+}
+
+
 const NewsCard = (props) => {
+
+  function handleSaveClick() {
+    props.handleSaveNews(props)
+}
+
+function handleDeleteClick() {
+    props.handleDeleteCard(props)
+}
+
+const classCheck = () => {
+if (props.location.pathname !== '/saved-news' && props.saved !== undefined) {
+
+return 'news__card-flag-blue'
+}
+else if (props.location.pathname !== '/saved-news' && props.saved === undefined) {
+  return 'news__card-flag'
+}
+else return 'news__card-flag-trash'
+}
+
+
     return (
-      <figure className="news__card">
-        <img src={img} alt="Национальное достояние – парки" className="news__card-pic" />
+
+      <figure className={`news__card ${props.index >= 3 && 'hidden'}`}>
+        <img src={props.img} alt={props.alt} className="news__card-pic"/>
           <div className="news__card-utils">
-            <p className="news__card-topic">Природа</p>
-            <button className="news__card-flag"></button>
-            <p className="news__card-info">Войдите, чтобы сохранять статьи</p>
+            <p className="news__card-topic" style={props.location.pathname === '/saved-news' ? display : displayNon }>{props.keyword}</p>
+            <button className={classCheck()} onClick={props.location.pathname === '/saved-news' ? handleDeleteClick : handleSaveClick }></button>
+            <p className="news__card-info" style={props.loggedIn ? displayNon : display}>Войдите, чтобы сохранять статьи</p>
 
           </div>
-        <figcaption className="news__caption">
-          <p className="news__card-date">2 августа, 2019</p>
-          <h4 className="news__card-title">Национальное достояние – парки</h4>
-          <p className="news__card-text">В 2016 году Америка отмечала важный юбилей: сто лет назад здесь начала
-                складываться система национальных парков – охраняемых территорий, где и сегодня каждый может приобщиться
-                к природе.</p>
-          <p className="news__card-src">Лента.ру</p>
-        </figcaption>
+        <Link to={{ pathname:props.url }} target="_blank" className="news__caption-link"><figcaption className="news__caption">
+          <p className="news__card-date">{props.location.pathname === '/saved-news' ? props.createdAt.slice(0, 10) : props.date.slice(0, 10)}</p>
+          <h4 className="news__card-title">{props.title}</h4>
+          <p className="news__card-text">{props.description}</p>
+          <p className="news__card-src">{props.source}</p>
+        </figcaption></Link>
       </figure>
     );
 }

@@ -6,9 +6,17 @@ import './SearchForm.css'
 
 const SearchForm = ({handlSearch, ...props}) => {
 
+  const display = {
+    display: 'flex',
+  }
+  const displayNon = {
+    display: 'none',
+  }
+
   const [data, setData] = useState({
     search: '',
   });
+  const [error, setError] = useState(false);
   
   const handleChange = (e) => {
     const {name, value} = e.target;
@@ -21,7 +29,9 @@ const SearchForm = ({handlSearch, ...props}) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const { search } = data;
+    if (search.length !== null)
     handlSearch(search);
+    else setError(true)
   }
 
     return (
@@ -37,6 +47,7 @@ const SearchForm = ({handlSearch, ...props}) => {
             placeholder="Поиск"
             onChange={handleChange} 
             required />
+            <span className='search-error' id='search-error' style={error ? display : displayNon}>Нужно ввести ключевое слово!</span>
           <button type="submit" className="search__button">Искать</button>
         </form>
       </section>

@@ -1,6 +1,6 @@
 .news__nonews {
   box-sizing: border-box;
-  width: 1232px;
+  max-width: 1232px;
   margin: 0 auto;
   background: #F5F6F7;
   display: flex;

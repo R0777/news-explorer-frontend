@@ -21,11 +21,15 @@ class NewsApi {
 
 getNews(search) {
   return fetch(this._url +
-    'country=ru&' +
+    'language=ru&' +
     `q=${search}&` +
+    'sortBy=popularity&' +
     `from=${this._fromdate}&` +
-    `to=${this._todate}` +
-    'apiKey=8a9ed8705b1c49f7b9372c8d34946c60')
+    `to=${this._todate}&` +
+    'pageSize=100&' +
+    'apiKey=8a9ed8705b1c49f7b9372c8d34946c60', {
+      method: 'GET',
+    })
     .then((res) => this._getResponseData(res));
 }
 

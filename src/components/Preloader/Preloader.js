@@ -3,7 +3,7 @@ import React from 'react'
 const Preloader = (props) => {
 
   const display = {
-    display: 'block',
+    display: 'flex',
   }
   const displayNon = {
     display: 'none',

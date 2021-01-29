@@ -20,7 +20,6 @@ export const authorize = (email, password) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      
     },
     body: JSON.stringify({email, password})
   })
@@ -44,4 +43,61 @@ export const getContent = (token) => {
     }
   })
   .then(res => res.json())
+};
+
+export const getSavedNews = (token) => {
+  return fetch(`${BASE_URL}/articles`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+  })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(new Error(`Опаньки, ошибка: ${res.status}`));
+    })
+}
+
+export const saveNews = ({ keyword, title, description, date, source, url, img }, token) => {
+  return fetch(`${BASE_URL}/articles`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({
+    keyword: keyword,
+    title: title,
+    text: description,
+    date: date,
+    source: source,
+    link: url,
+    image: img,
+    }),
+  })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(new Error(`Опаньки, ошибка: ${res.status}`));
+    })
+}
+
+export const deleteNews = (id, token) => {
+  return fetch(`${BASE_URL}/articles/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+  })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(new Error(`Опаньки, ошибка: ${res.status}`));
+    })
 }
