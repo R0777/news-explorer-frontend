@@ -40,6 +40,10 @@
   cursor: url(../../images/svg/lapka.svg), auto;
 }
 
+.hidden {
+  display: none;
+}
+
 .news__found-button:hover {
   opacity: .9;
 }
@@ -62,6 +66,9 @@
     grid-gap: 8px;
     padding-top: 32px;
   }
+  .news__card-pic {
+    height: 150px;
+  }
 }
 
 @media screen and (max-width: 767px) {
@@ -75,6 +82,9 @@
     width: 100%;
     padding: 15px 0 17px;
     margin: 22px auto 32px;
+  }
+  .news__card-pic {
+    height: 196px;
   }
   .news {
     padding: 32px 16px

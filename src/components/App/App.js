@@ -11,17 +11,21 @@ import Footer from '../Footer/Footer';
 import Popup from '../Popup/Popup';
 import RegistrPopup from '../RegistrPopup/RegistrPopup';
 import LoginPopup from '../LoginPopup/LoginPopup';
-import * as auth from '../../utils/auth.js';
+import * as mainApi from '../../utils/MainApi';
 import { getToken, setToken } from '../../utils/token';
-import {api} from '../../utils/api.js';
-import {CurrentUserContext} from '../../contexts/CurrentUserContext'
-import {CurrentCardContext} from '../../contexts/CurrentCardContext'
+import { newsApi } from '../../utils/NewsApi.js';
+import {CurrentSavedNewsContext} from '../../contexts/CurrentSavedNewsContext'
+import {CurrentNewsContext} from '../../contexts/CurrentNewsContext'
 
 const App = () => {
 
     const [loggedIn, setLoggedIn] = useState(false);
+    const [news, setNews] = useState(false);
     const [location, setLocation] = useState('/');
     const [input, setInput] = useState(false);
+    const [searching, setSearching] = useState(false);
+    const [newsFound, setnewsFound] = useState(false);
+    const [nonews, setNonews] = useState(false);
     const [userData, setUserData] = useState({ name: '', email: ''});
     const [path, setPath] = useState('/signup');
     const [text, setText] = useState('Регистрация');
@@ -35,11 +39,39 @@ const App = () => {
         setText(text);
     }
 
-    const handleLogin = (userData) => {
-        console.log(userData)
-        // setUserData(userData);
+    const handleLogin = (userData, token) => {
+
+        setUserData(userData);
         setLoggedIn(true);
-        handleTooltip()
+        mainApi.getSavedNews(token)
+        .then((res) => {
+            setCurrentSavedNews(res)
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+        closeAllPopups()
+    }
+
+    const showSavedNews = () => {
+      const jwt = getToken();
+        mainApi.getSavedNews(jwt)
+        .then((res) => {
+          setCurrentSavedNews(res)
+            if (currentSavedNews.length !== 0) {
+                
+                setNonews(false)
+                setnewsFound(true)
+          } else {
+            setSearching(false)
+            setnewsFound(false)
+            setNonews(true)
+            return
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        });
     }
     
     const tokenCheck = () => {
@@ -47,7 +79,7 @@ const App = () => {
         if (!jwt) {
         return;
         }
-        auth.getContent(jwt).then((res) => {
+        mainApi.getContent(jwt).then((res) => {
             
         if (res.email) {
             const userData = { 
@@ -56,23 +88,9 @@ const App = () => {
             }
             setLoggedIn(true)
             setUserData(userData)
-            // history.push('/')
-
-                // Promise.all([
-                //     api.getProfile(),
-                //     api.getInitialCards()
-                // ]).then(res => {
-                //     const [profile, card] = res
-                //     setCurrentUser(profile)
-                //     setCurrentCards(card)
-                // })
-                // .catch((err) => {
-                //     console.log(err);
-                // })
 
         }
         })
-
         .catch((err) => {
             console.log(err);
         })
@@ -81,14 +99,14 @@ const App = () => {
     const signOut = () => {
         localStorage.removeItem('jwt');
         setLoggedIn(false);
-        history.push('/');
+        history.push('/')
+        handleLocation();
     }
     
-        useEffect(() => {
-
-                tokenCheck();
-
-    }, []);
+    useEffect(() => {
+    tokenCheck();
+    //showSavedNews();
+    }, []); 
 
     const [isAcceptPopupOpen,
         setIsAcceptPopupOpen] = React.useState(false);
@@ -100,55 +118,49 @@ const App = () => {
         setIsTrashOpen] = React.useState(false);
     const [isTooltipOpen,
             setTooltipOpen] = React.useState(false);
+    const [keyword, setKeyword] = useState('');
     const [isSelectedCard,
         setIsSelectedCard] = React.useState()
-    const [currentUser,
-        setCurrentUser] = React.useState({})
-    const [currentCards,
-        setCurrentCards] = React.useState([])
+    const [currentSavedNews,
+        setCurrentSavedNews] = React.useState([])
+    const [currentNews,
+        setCurrentNews] = React.useState([])
 
 
     
-    // const handleCardLike = (card) => {
-    //     const isLiked = card.likes.some(i => i === currentUser._id);
-    //     if (!isLiked) {
-    //         api.addLike(card._id)
-    //             .then((newCard) => {
-    //                 const newCards = currentCards.map(c => c._id === card._id
-    //                     ? newCard
-    //                     : c);
-    //                 setCurrentCards(newCards);
-    //             })
-    //             .catch((err) => {
-    //                 console.log(err);
-    //             });
-    //     } else {
-    //         api.unLike(card._id)
-    //             .then((newCard) => {
-                    
-    //                 const newCards = currentCards.map(c => c._id === card._id
-    //                     ? newCard
-    //                     : c);
-    //                 setCurrentCards(newCards);
-    //             })
-    //             .catch((err) => {
-    //                 console.log(err);
-    //             });
-    //     }
-    // }
+    const handleSaveNews = (card) => {
 
-    // const handleDeleteCard = (card) => {
+        const isSaved = currentSavedNews.find((elem) => elem.link === card.url);
 
-    //     api
-    //         .deleteCard(card._id)
-    //         .then(res => {
-    //             const deletedCard = currentCards.filter(el => el._id !== card._id)
-    //             setCurrentCards(deletedCard);
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         });
-    // }
+        if (!isSaved) {
+          const jwt = getToken();
+          if (!jwt) {
+          return;
+          }
+            mainApi.saveNews(card, jwt)
+                .then((newCard) => {
+        
+                        showSavedNews()
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        } else {
+          handleDeleteCard(isSaved)
+        }
+    }
+
+    const handleDeleteCard = (card) => {
+const jwt = getToken()
+        mainApi.deleteNews(card._id, jwt)
+            .then(res => {
+                const deletedCard = currentSavedNews.filter(el => el._id !== card._id)
+                setCurrentSavedNews(deletedCard)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
 
     function handleAcceptPopupClick() {
     closeAllPopups()
@@ -165,20 +177,12 @@ const App = () => {
     setIsLoginPopupOpen(true)
     }
 
-    // function handleTrashClick() {
-    //     setIsTrashOpen(true)
-    // }
-
-    // const handleCardClick = (card) => {
-    //     setIsSelectedCard(card)
-    // }
-
     function handleTooltip() {
         closeAllPopups()
         setTooltipOpen(true)
     }
 
-    function handleLocation() {
+    const handleLocation = () => {
     const location = window.location.pathname
     if (location === '/')
         setLocation(location)
@@ -195,55 +199,53 @@ const App = () => {
         setTooltipOpen(false)
     setIsRegistrPopupOpen(false)
     setIsLoginPopupOpen(false)
-        // setIsTrashOpen(false)
-        // setTooltipOpen(false)
-        // setIsSelectedCard()
     }
 
-    // function handleUpdateUser({name, about}) {
-    //     api.setProfile(name, about)
-    //         .then(res => {
-    //             setCurrentUser(res)
-    //             closeAllPopups();
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         })
-    // }
+const handlSearch = (search) => {
+  setnewsFound(false)
+  setNonews(false)
+  setNews(true)
+  setSearching(true)
+  newsApi.getNews(search)
+  .then((res) => {
+    if (res.articles.length !== 0) {
+      setKeyword(search)
+      setSearching(false)
+      setNonews(false)
+      setCurrentNews(res.articles)
+      setnewsFound(true)
+} else {
+    setSearching(false)
+    setnewsFound(false)
+    setNonews(true)
+    setNews(true)
+  }
+    
+})
+.catch((err) => {
+    console.log(err)
+});
+}
 
-    // const handleUpdateAvatar = ({avatar}) => {
-    //     api.profileAvatar(avatar)
-    //         .then(res => {
-    //             setCurrentUser(res)
-    //             closeAllPopups();
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         })
-    // }
+const showMore = () => {
+  const showPerClick = 3;
+  let hidden = document.querySelectorAll('.hidden');
+  for (let i = 0; i < showPerClick; i++) {
+    if (!hidden[i]) return
+    hidden[i].classList.remove('hidden');
+}
+}
 
-    // const handleAddPlaceSubmit = ({place, link}) => {
-    //     api.setCard(place, link )
-    //         .then(res => {
-    //             setCurrentCards([
-    //                 res, ...currentCards
-    //             ])
-    //             closeAllPopups();
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         })
-        
-    // }
 
     const handlRegister = (email, password, name) => {
 
-        auth.register(email, password, name)
+        mainApi.register(email, password, name)
             .then((res) => {
 
                 if ((res.status !== 401) && (res.status !== 400 ) && (res.status !== 409 )) {
+                  handleTooltip()
                     history.push('/') 
-                } else handleTooltip();
+                } else return
             })
             .catch((err) => {
                 console.log(err)
@@ -257,16 +259,16 @@ const App = () => {
             return;
         }
 
-        auth.authorize(email, password)
+        mainApi.authorize(email, password)
             .then((res) => {
                 if (!res){
-                    handleTooltip()
+                    return
                 }
     
                 if (res.token) {
                 setToken(res.token);
                 //setData({ email: '', password: ''});
-                handleLogin(data);
+                handleLogin(data, res.token);
                 // history.push('/');
                 }
             })
@@ -277,8 +279,8 @@ const App = () => {
     }
 
     return (
-        <CurrentCardContext.Provider value={currentCards}>
-            <CurrentUserContext.Provider value={currentUser}>
+        <CurrentNewsContext.Provider value={currentNews}>
+            <CurrentSavedNewsContext.Provider value={currentSavedNews}>
                 <>
                     
                     <Header 
@@ -289,20 +291,37 @@ const App = () => {
                     handleCheck={handleCheck}
                     signOut={signOut}
                     checked={input}
-                    userData={userData} />
+                    userData={userData}
+                    showSavedNews={showSavedNews} />
                     <main>
                     <Switch>
 
                     <ProtectedRoute 
                     path="/saved-news"
                     loggedIn={loggedIn}
+                    location={location}
                     component={SavedNews} 
                     userData={userData}
-                    link="" />
+                    link="" 
+                    handleDeleteCard={handleDeleteCard}
+                    showMore={showMore}
+                    newsFound={newsFound}
+                    nonews={nonews}/>
 
                     <Route path="/">                    
-                    <SearchForm />
-                    <NewsCardList />
+                    <SearchForm
+                    handlSearch={handlSearch} />
+                    <NewsCardList
+                    news={news}
+                    loggedIn={loggedIn}
+                    location={location} 
+                    keyword={keyword}
+                    handleSaveNews={handleSaveNews}
+                    showMore={showMore}
+                    searching={searching}
+                    newsFound={newsFound}
+                    nonews={nonews}
+                    />
                     <About 
                     userData={userData} />
                     </Route>
@@ -346,8 +365,8 @@ const App = () => {
                     <Footer 
                     handleLocation={handleLocation}/>
                 </>
-            </CurrentUserContext.Provider>
-        </CurrentCardContext.Provider>
+            </CurrentSavedNewsContext.Provider>
+        </CurrentNewsContext.Provider>
 
     );
 }

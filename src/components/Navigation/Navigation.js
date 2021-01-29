@@ -19,7 +19,7 @@ const Navigation = (props) => {
         </label>
           <ul className="header__nav-links">
             <li onClick={props.handleLocation}><Link to="/" className={props.location === '/saved-news'? 'header__nav-link header__nav-link_blacked': 'header__nav-link'}>Главная</Link></li>
-            <li style={props.loggedIn ? display : displayNon } onClick={props.handleLocation}><Link to="/saved-news" className={props.location === '/saved-news'? 'header__nav-link header__nav-link_blacked': 'header__nav-link'}>Сохранённые статьи</Link></li>
+            <li style={props.loggedIn ? display : displayNon } onClick={props.handleLocation}><Link onClick={props.showSavedNews} to="/saved-news" className={props.location === '/saved-news'? 'header__nav-link header__nav-link_blacked': 'header__nav-link'}>Сохранённые статьи</Link></li>
             <li><button onClick={props.loggedIn ? props.signOut : props.onLoginPopup} className={props.location === '/saved-news'? 'header__nav-button header__nav-button-w': 'header__nav-button'}>{props.loggedIn ? `${props.userData.name}` : 'Авторизоваться'}</button></li>
           </ul>
       </nav>
