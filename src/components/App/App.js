@@ -146,15 +146,7 @@ const App = () => {
                     console.log(err);
                 });
         } else {
-          const jwt = getToken()
-        mainApi.deleteNews(isSaved._id, jwt)
-            .then(res => {
-                const deletedCard = currentSavedNews.filter(el => el._id !== card._id)
-                setCurrentSavedNews(deletedCard)
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+          handleDeleteCard(isSaved)
         }
     }
 
