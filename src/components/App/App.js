@@ -66,9 +66,9 @@ const App = () => {
                 //     setCurrentUser(profile)
                 //     setCurrentCards(card)
                 // })
-                .catch((err) => {
-                    console.log(err);
-                })
+                // .catch((err) => {
+                //     console.log(err);
+                // })
 
         }
         })
