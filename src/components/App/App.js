@@ -105,7 +105,6 @@ const App = () => {
     
     useEffect(() => {
     tokenCheck();
-    showSavedNews();
     }, []); 
 
     const [isAcceptPopupOpen,
