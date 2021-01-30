@@ -2,6 +2,7 @@ import React from 'react';
 import { Link} from 'react-router-dom'
 const Popup = (props) => {
 
+
     return (
         <section className={`popup ${props.isOpen && 'active'}`} id={props.id}>
             <form className="popup__block" noValidate onSubmit={props.handleSubmit}>
