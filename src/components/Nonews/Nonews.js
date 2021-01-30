@@ -11,7 +11,7 @@ const Nonews = (props) => {
   }
 
 return(
-			<div className="news__nonews" style={props.nonews ? display : displayNon}>
+			<div className="news__nonews" style={ props.noNews ? display : displayNon }>
         <img src={notFound} alt="Ничего не нашлось" className="news__nonews-pic" />
         <h3 className="nonews__title">Ничего не найдено</h3>
         <p className="nonews__text">К сожалению по вашему запросу ничего не найдено.</p>

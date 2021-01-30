@@ -19,7 +19,7 @@ const SavedNewsHeader = (props) => {
     return (
       <section className="yournews">
         <p className="yournews__text">Сохранённые статьи</p>
-        <h2 className="yournews__title">{props.userData.name}, у вас {articles} сохранённых статей</h2>
+        <h2 className="yournews__title">{props.userData.name}, у вас {(articles === 0) ? 'нет' : articles} сохранённых статей</h2>
         <p className="yournews__keywords" style={(props.array[0] !== undefined) ? display : displayNon}>По ключевым словам: <span className="younews__topic">{(props.array[0] !== undefined) && props.array[0].keyword}, {(props.array[1] !== undefined) && props.array[1].keyword } </span> <span
           className="younews__topic-numb" style={(props.array[2] !== undefined) ? display : displayNon}>{(props.array[2] !== undefined) && 'и другим' }</span></p>
       </section>
