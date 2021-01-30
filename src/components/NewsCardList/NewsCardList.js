@@ -55,7 +55,7 @@ const NewsCardList = ({showMore, ...props}) => {
             <button className="news__found-button" onClick={showMore}>Показать еще</button>
           </div>
         <Preloader searching={props.searching} />
-        <Nonews nonews={props.nonews} />
+        <Nonews noNews={props.noNews} />
         </section>
     );
 }

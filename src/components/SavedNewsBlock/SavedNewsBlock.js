@@ -1,5 +1,4 @@
 import React from 'react';
-import Nonews from '../Nonews/Nonews'
 import NewsCard from '../NewsCard/NewsCard';
 import './SavedNewsBlock.css'
 
@@ -34,16 +33,14 @@ const SavedNewsBlock = ({showMore, ...props}) => {
     }))
 
     return (
-        <section className="news" style={props.newsFound || props.nonews ? display : displayNon}>
-          <div className="news__found" style={props.newsFound ? display : displayNon}>
+        <section className="news" style={props.savedNewsFound || props.noSavedNews ? display : displayNon }>
+          <div className="news__found" style={props.noSavedNews ? displayNon : display }>
             <h2 className="news__title">Результаты поиска</h2>
             <div className="news__cards">
             {items.map(card => <NewsCard key={card._id} {...card} {...props}/>)}
 
             </div>
-            <button className="news__found-button" onClick={showMore}>Показать еще</button>
           </div>
-        <Nonews nonews={props.nonews} />
         </section>
     );
 }

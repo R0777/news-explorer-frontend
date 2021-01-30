@@ -24,14 +24,16 @@ const App = () => {
     const [location, setLocation] = useState('/');
     const [input, setInput] = useState(false);
     const [searching, setSearching] = useState(false);
-    const [newsFound, setnewsFound] = useState(false);
-    const [nonews, setNonews] = useState(false);
+    const [newsFound, setNewsFound] = useState(false);
+    const [savedNewsFound, setSavedNewsFound] = useState(false);
+    const [noNews, setNoNews] = useState(false);
     const [userData, setUserData] = useState({ name: '', email: ''});
     const history = useHistory();
 
     const handleLogin = (userData, token) => {
 
         setUserData(userData);
+        setNews(false)
         setLoggedIn(true);
         mainApi.getSavedNews(token)
         .then((res) => {
@@ -51,14 +53,16 @@ const App = () => {
         mainApi.getSavedNews(jwt)
         .then((res) => {
           setCurrentSavedNews(res)
+        
             if (currentSavedNews.length !== 0) {
                 
-                setNonews(false)
-                setnewsFound(true)
+                setNoNews(false)
+                setSavedNewsFound(true)
           } else {
             setSearching(false)
-            setnewsFound(false)
-            setNonews(true)
+            // setNewsFound(false)
+            setSavedNewsFound(false)
+            // setNoNews(true)
             return
             }
         })
@@ -108,6 +112,8 @@ const App = () => {
         setIsLoginPopupOpen] = React.useState(false);
     const [isTooltipOpen,
             setTooltipOpen] = React.useState(false);
+    const [showNews,
+              setShowNews] = React.useState(3);
     const [keyword, setKeyword] = useState('');
     const [currentSavedNews,
         setCurrentSavedNews] = React.useState([])
@@ -124,14 +130,19 @@ const App = () => {
           const jwt = getToken();
           if (!jwt) {
           return;
-          }
-            mainApi.saveNews(card, jwt)
-                .then((res) => {
-                    showSavedNews()
+        }
+                Promise.all([
+                    mainApi.saveNews(card, jwt),
+                    mainApi.getSavedNews(jwt)
+                ]).then(res => {
+                    const [newNewsCard, news] = res
+                    
+                    setCurrentSavedNews(news)
                 })
                 .catch((err) => {
                     console.log(err);
-                });
+                })
+            
         } else {
           handleDeleteCard(isSaved)
         }
@@ -146,6 +157,9 @@ if (!jwt) {
             .then(res => {
                 const deletedCard = currentSavedNews.filter(el => el._id !== card._id)
                 setCurrentSavedNews(deletedCard)
+                if ( currentSavedNews.length <= 1 && location === '/saved-news' ) {
+                  setSavedNewsFound(false)
+                }
             })
             .catch((err) => {
                 console.log(err);
@@ -187,8 +201,10 @@ if (!jwt) {
     }
 
 const handlSearch = (search) => {
-  setnewsFound(false)
-  setNonews(false)
+  setShowNews(3)
+  setNewsFound(false)
+  setSavedNewsFound(false)
+  setNoNews(false)
   setNews(true)
   setSearching(true)
   newsApi.getNews(search)
@@ -196,13 +212,15 @@ const handlSearch = (search) => {
     if (res.articles.length !== 0) {
       setKeyword(search)
       setSearching(false)
-      setNonews(false)
+      setNoNews(false)
       setCurrentNews(res.articles)
-      setnewsFound(true)
+      setSavedNewsFound(true)
+      setNewsFound(true)
 } else {
     setSearching(false)
-    setnewsFound(false)
-    setNonews(true)
+    setSavedNewsFound(false)
+    setNewsFound(false)
+    setNoNews(true)
     setNews(true)
   }
     
@@ -212,13 +230,17 @@ const handlSearch = (search) => {
 });
 }
 
+
 const showMore = () => {
   const showPerClick = 3;
-  let hidden = document.querySelectorAll('.hidden');
+  let show = showNews
+  const hidden = document.querySelectorAll('.hidden');
   for (let i = 0; i < showPerClick; i++) {
     if (!hidden[i]) return
     hidden[i].classList.remove('hidden');
 }
+let newNumber = show + showPerClick
+setShowNews(newNumber)
 }
 
 
@@ -290,13 +312,14 @@ const showMore = () => {
                     link="" 
                     handleDeleteCard={handleDeleteCard}
                     showMore={showMore}
-                    newsFound={newsFound}
-                    nonews={nonews}/>
+                    savedNewsFound={savedNewsFound}
+                    />
 
                     <Route path="/">                    
                     <SearchForm
                     handlSearch={handlSearch} />
                     <NewsCardList
+                    showNews={showNews}
                     news={news}
                     loggedIn={loggedIn}
                     location={location} 
@@ -305,7 +328,7 @@ const showMore = () => {
                     showMore={showMore}
                     searching={searching}
                     newsFound={newsFound}
-                    nonews={nonews}
+                    noNews={noNews}
                     />
                     <About 
                     userData={userData} />

@@ -33,7 +33,7 @@ const classCheck = () => {
 
     return (
 
-      <figure className={`news__card ${props.index >= 3 && 'hidden'}`}>
+      <figure className={`news__card ${props.index >= props.showNews && 'hidden'}`}>
         <img src={props.img} alt={props.alt} className="news__card-pic"/>
           <div className="news__card-utils">
             <p className="news__card-topic" style={props.location.pathname === '/saved-news' ? display : displayNon }>{props.keyword}</p>

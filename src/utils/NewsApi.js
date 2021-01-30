@@ -46,7 +46,7 @@ const todate = new Date();
 todate.setDate(todate.getDate() - 7);
 
 const newsApi = new NewsApi({
-  url: 'http://newsapi.org/v2/everything?',
+  url: 'https://newsapi.org/v2/everything?',
   headers: {
     'Content-Type': 'application/json',
   },
