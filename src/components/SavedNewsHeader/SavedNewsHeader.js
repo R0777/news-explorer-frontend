@@ -28,7 +28,7 @@ const SavedNewsHeader = (props) => {
     }
 const bigArray = (uniqueArray) => {
 if (uniqueArray.length > 2) {
-  let bigArray = uniqueArray.slice(2,(uniqueArray.length + 1))
+  let bigArray = uniqueArray.slice(2,(uniqueArray.length))
   return bigArray.length
 }
 return
