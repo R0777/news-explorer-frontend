@@ -134,13 +134,16 @@ const App = () => {
           if (!jwt) {
           return;
         }
-                Promise.all([
-                    mainApi.saveNews(card, jwt),
-                    mainApi.getSavedNews(jwt)
-                ]).then(res => {
-                    const [newNewsCard, news] = res
-                    
-                    setCurrentSavedNews(news)
+
+
+        mainApi.saveNews(card, jwt)
+        .catch((err) => {
+                console.log(err);
+            })
+
+        mainApi.getSavedNews(jwt)
+                .then(res => {                    
+                    setCurrentSavedNews(res)
                 })
                 .catch((err) => {
                     console.log(err);
