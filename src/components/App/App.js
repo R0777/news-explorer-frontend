@@ -61,9 +61,7 @@ const App = () => {
                 setSavedNewsFound(true)
           } else {
             setSearching(false)
-            // setNewsFound(false)
             setSavedNewsFound(false)
-            // setNoNews(true)
             return
             }
         })
@@ -84,19 +82,20 @@ const App = () => {
                 name: res.name,   
             email: res.email
             }
-
-            const localNews = getCards()
-if (localNews !== undefined) {
-    handlSearch(localNews)
-    setUserData(userData)
-    setLoggedIn(true)
-    }
-
+            setUserData(userData)
         }
+        const localNews = getCards()
+        if (localNews !== null) {
+            handlSearch(localNews)
+            
+            setLoggedIn(true)
+            }
         })
         .catch((err) => {
             console.log(err);
         })
+        
+
     }
 
     const signOut = () => {
@@ -109,7 +108,7 @@ if (localNews !== undefined) {
     
     useEffect(() => {
     tokenCheck();
-    //showSavedNews();
+    showSavedNews();
     }, []); 
 
 
@@ -141,7 +140,6 @@ if (localNews !== undefined) {
           if (!jwt) {
           return;
         }
-
 
         mainApi.saveNews(card, jwt)
         .catch((err) => {
