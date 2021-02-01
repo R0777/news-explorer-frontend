@@ -13,6 +13,7 @@ import RegistrPopup from '../RegistrPopup/RegistrPopup';
 import LoginPopup from '../LoginPopup/LoginPopup';
 import * as mainApi from '../../utils/MainApi';
 import { getToken, setToken } from '../../utils/token';
+import { getCards, setCards } from '../../utils/localCards';
 import { newsApi } from '../../utils/NewsApi.js';
 import {CurrentSavedNewsContext} from '../../contexts/CurrentSavedNewsContext'
 import {CurrentNewsContext} from '../../contexts/CurrentNewsContext'
@@ -83,8 +84,13 @@ const App = () => {
                 name: res.name,   
             email: res.email
             }
-            setLoggedIn(true)
-            setUserData(userData)
+
+            const localNews = getCards()
+if (localNews !== undefined) {
+    handlSearch(localNews)
+    setUserData(userData)
+    setLoggedIn(true)
+    }
 
         }
         })
@@ -95,6 +101,7 @@ const App = () => {
 
     const signOut = () => {
         localStorage.removeItem('jwt');
+        localStorage.removeItem('keyword');
         setLoggedIn(false);
         history.push('/')
         handleLocation();
@@ -207,6 +214,7 @@ if (!jwt) {
     }
 
 const handlSearch = (search) => {
+    
   setShowNews(3)
   setNewsFound(false)
   setSavedNewsFound(false)
@@ -220,6 +228,7 @@ const handlSearch = (search) => {
       setSearching(false)
       setNoNews(false)
       setCurrentNews(res.articles)
+      setCards(search)
       setSavedNewsFound(true)
       setNewsFound(true)
 } else {
