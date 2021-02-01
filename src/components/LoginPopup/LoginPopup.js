@@ -1,25 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
+import UseForm from '../UseForm/UseForm'
 import Popup from '../Popup/Popup';
 
 const LoginPopup = ({ handlAuthorize, ...props }) => {
 
-  const [data, setData] = useState({
-    email: '',
-    password: ''
-    });
+  const {values, errors, handleChange, resetForm, isValid} = UseForm();
 
-    const handleChange = (e) => {
-    const {name, value} = e.target;
-    setData((prevData) => ({
-        ...prevData,
-        [name]: value,
-    }));
-}
-    
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        handlAuthorize(data)
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handlAuthorize( values );
+    resetForm()
+  }
 
     return (
 <Popup
@@ -38,26 +29,28 @@ const LoginPopup = ({ handlAuthorize, ...props }) => {
                 className="popup__input popup__input_email" 
                 id='login-email' 
                 name="email"
+                value={values.email || ''}
                 placeholder="Введите свой email" 
-                minLength="2" 
-                maxLength="40"
+                minLength={2} 
+                maxLength={40}
                 onChange={handleChange}
                 required />
-              <span className='popup__input-error' id='login-email-error'></span>
+              <span className="popup__input-error active" id='login-email-error'>{(errors && props.isOpen) && errors.email}</span>
           </label>
           <label className="popup__field">Пароль
               <input 
                 type="password" className="popup__input popup__input_pass" 
                 id='login-pass' 
                 name="password"
+                value={values.password || ''}
                 placeholder="Введите пароль"
-                minLength="2" 
-                maxLength="40"
+                minLength={2} 
+                maxLength={40}
                 onChange={handleChange}
                 required />
-              <span className='popup__input-error' id='login-pass-error'></span>
+              <span className="popup__input-error active" id='login-pass-error'>{(errors && props.isOpen) && errors.password}</span>
           </label>
-          <button type="submit" className="popup__save">{props.buttonText}</button>
+          <button type="submit" className={isValid ? 'popup__save' :'popup__save inactive'}>{props.buttonText}</button>
 </Popup>
     );
 }

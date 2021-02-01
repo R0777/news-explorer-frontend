@@ -124,6 +124,9 @@ const App = () => {
     
     const handleSaveNews = (card) => {
 
+        if (!loggedIn) {
+            handleRegistrPopupClick()
+        }
         const isSaved = currentSavedNews.find((elem) => elem.link === card.url);
 
         if (!isSaved) {
@@ -131,13 +134,16 @@ const App = () => {
           if (!jwt) {
           return;
         }
-                Promise.all([
-                    mainApi.saveNews(card, jwt),
-                    mainApi.getSavedNews(jwt)
-                ]).then(res => {
-                    const [newNewsCard, news] = res
-                    
-                    setCurrentSavedNews(news)
+
+
+        mainApi.saveNews(card, jwt)
+        .catch((err) => {
+                console.log(err);
+            })
+
+        mainApi.getSavedNews(jwt)
+                .then(res => {                    
+                    setCurrentSavedNews(res)
                 })
                 .catch((err) => {
                     console.log(err);
@@ -304,6 +310,7 @@ setShowNews(newNumber)
                     <Switch>
 
                     <ProtectedRoute 
+                    handleLoginPopupClick={handleLoginPopupClick}
                     path="/saved-news"
                     loggedIn={loggedIn}
                     location={location}
@@ -319,6 +326,7 @@ setShowNews(newNumber)
                     <SearchForm
                     handlSearch={handlSearch} />
                     <NewsCardList
+                    handleRegistrPopupClick={handleRegistrPopupClick}
                     showNews={showNews}
                     news={news}
                     loggedIn={loggedIn}
@@ -349,6 +357,7 @@ setShowNews(newNumber)
                         handleAfterLink={handleLoginPopupClick} />
 
                     <RegistrPopup
+                        
                         title="Регистрация"
                         id="registr"
                         afterLink="Войти"
@@ -360,6 +369,7 @@ setShowNews(newNumber)
                         handlRegister={handlRegister} />
                         
                     <LoginPopup
+                        
                         title="Вход"
                         id="login"
                         afterLink="Зарегистрироваться"

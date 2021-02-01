@@ -1,28 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
+import UseForm from '../UseForm/UseForm'
 import Popup from '../Popup/Popup';
 
 const RegistrPopup = ({ handlRegister, ...props }) => {
 
-  const [data, setData] = useState( {
-    email: '',
-    password: '',
-    name: ''
-  });
-
-  const handleChange = (e) => {
-    const {name, value} = e.target;
-    setData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  }
+const {values, errors, handleChange} = UseForm();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { email, password, name } = data;
+    const { email, password, name } = values;
     handlRegister(email, password, name);
   }
-
 
     return (
         <Popup
@@ -43,11 +31,12 @@ const RegistrPopup = ({ handlRegister, ...props }) => {
                 id='registr-email' 
                 name="email"
                 placeholder="Введите свой email"  
-                minLength="2" 
-                maxLength="40"
+                minLength={2} 
+                maxLength={40}
                 onChange={handleChange} 
+                value={values.email || ''}
                 required />
-              <span className='popup__input-error' id='registr-email-error'></span>
+              <span className='popup__input-error active' id='registr-email-error'>{(errors && props.isOpen) && errors.email}</span>
           </label>
           <label className="popup__field">Пароль
               <input 
@@ -55,11 +44,12 @@ const RegistrPopup = ({ handlRegister, ...props }) => {
                 id='registr-pass' 
                 name="password"
                 placeholder="Введите пароль" 
-                minLength="2" 
-                maxLength="40"
+                minLength={2} 
+                maxLength={40}
                 onChange={handleChange} 
+                value={values.password || ''}
                 required />
-              <span className='popup__input-error' id='registr-pass-error'></span>
+              <span className='popup__input-error active' id='registr-pass-error'>{(errors && props.isOpen) && errors.password}</span>
           </label>
           <label className="popup__field">Имя
               <input 
@@ -68,11 +58,12 @@ const RegistrPopup = ({ handlRegister, ...props }) => {
                 id='registr-name' 
                 name="name"
                 placeholder="Введите своё имя" 
-                minLength="2" 
-                maxLength="200" 
+                minLength={2} 
+                maxLength={200} 
                 onChange={handleChange}
+                value={values.name || ''}
                 required />
-              <span className='popup__input-error' id='registr-name-error'></span>
+              <span className='popup__input-error active' id='registr-name-error'>{(errors && props.isOpen) && errors.name}</span>
             </label>
             <button type="submit" className="popup__save">{props.buttonText}</button>
 
