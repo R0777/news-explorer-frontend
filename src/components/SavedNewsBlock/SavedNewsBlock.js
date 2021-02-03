@@ -1,36 +1,44 @@
 import React from 'react';
 import NewsCard from '../NewsCard/NewsCard';
+import './SavedNewsBlock.css'
 
-import {CurrentUserContext} from '../../contexts/CurrentUserContext'
-import {CurrentCardContext} from '../../contexts/CurrentCardContext'
+import {CurrentSavedNewsContext} from '../../contexts/CurrentSavedNewsContext'
 
-const SavedNewsBlock = (props) => {
+const SavedNewsBlock = ({showMore, ...props}) => {
 
-    const currentUserContext = React.useContext(CurrentUserContext);
-    const currentCardContext = React.useContext(CurrentCardContext);
+  const display = {
+    display: 'block',
+  }
+  const displayNon = {
+    display: 'none',
+  }
 
-    const items = currentCardContext.map(item => ({
+    const currentSavedNewsContext = React.useContext(CurrentSavedNewsContext);
+
+    const items = currentSavedNewsContext.map(item => ({
         
-        src: item.link,
+      img: item.image,
+      source: item.source,
+      keyword: item.keyword,
         _id: item._id,
         owner: item.owner,
-        alt: item.name,
-        likes: item.likes,
-        title: item.name,
-        like: item.likes.length,
-        cardLiked: item.likes.find((elem) => elem === currentUserContext._id)
+        alt: item.title,
+        date: item.date,
+        createdAt: item.createdAt,
+        url: item.link,
+        title: item.title,
+        description: item.text,
+        // like: item.likes.length,
+        // cardLiked: item.likes.find((elem) => elem === currentUserContext._id)
     }))
 
     return (
-        <section className="news">
-          <div className="news__found">
+        <section className="news" style={props.savedNewsFound || props.noSavedNews ? display : displayNon }>
+          <div className="news__found" style={props.noSavedNews ? displayNon : display }>
             <h2 className="news__title">Результаты поиска</h2>
             <div className="news__cards">
-                <NewsCard />
-                <NewsCard />
-                <NewsCard />
-                <NewsCard />
-                <NewsCard />
+            {items.map(card => <NewsCard key={card._id} {...card} {...props}/>)}
+
             </div>
           </div>
         </section>

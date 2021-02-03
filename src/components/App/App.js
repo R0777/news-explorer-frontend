@@ -11,145 +11,170 @@ import Footer from '../Footer/Footer';
 import Popup from '../Popup/Popup';
 import RegistrPopup from '../RegistrPopup/RegistrPopup';
 import LoginPopup from '../LoginPopup/LoginPopup';
-//import * as auth from '../utils/auth.js';
-//import { getToken, setToken } from '../utils/token';
-import {api} from '../../utils/api.js';
-import {CurrentUserContext} from '../../contexts/CurrentUserContext'
-import {CurrentCardContext} from '../../contexts/CurrentCardContext'
+import * as mainApi from '../../utils/MainApi';
+import { getToken, setToken } from '../../utils/token';
+import { getCards, setCards } from '../../utils/localCards';
+import { newsApi } from '../../utils/NewsApi.js';
+import {CurrentSavedNewsContext} from '../../contexts/CurrentSavedNewsContext'
+import {CurrentNewsContext} from '../../contexts/CurrentNewsContext'
 
 const App = () => {
 
-    const [loggedIn, setLoggedIn] = useState(true);
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [news, setNews] = useState(false);
     const [location, setLocation] = useState('/');
     const [input, setInput] = useState(false);
-    // const [userData, setUserData] = useState({ email: '', password: ''});
-    // const [path, setPath] = useState('/signup');
-    // const [text, setText] = useState('Регистрация');
-    // const history = useHistory();
+    const [searching, setSearching] = useState(false);
+    const [newsFound, setNewsFound] = useState(false);
+    const [savedNewsFound, setSavedNewsFound] = useState(false);
+    const [noNews, setNoNews] = useState(false);
+    const [userData, setUserData] = useState({ name: '', email: ''});
+    const history = useHistory();
 
-    // const handlePath = (path) => {
-    //     setPath(path);
-    // }
+    const handleLogin = (userData, token) => {
 
-    // const handleText = (text) => {
-    //     setText(text);
-    // }
+        setUserData(userData);
+        setNews(false)
+        setLoggedIn(true);
+        mainApi.getSavedNews(token)
+        .then((res) => {
+            setCurrentSavedNews(res)
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+        closeAllPopups()
+    }
 
-    // const handleLogin = (userData) => {
-    //     setUserData(userData);
-    //     setLoggedIn(true);
-    //     handleTooltip()
-    // }
+    const showSavedNews = () => {
+    const jwt = getToken();
+    if (!jwt) {
+        return;
+        }
+        mainApi.getSavedNews(jwt)
+        .then((res) => {
+          setCurrentSavedNews(res)
+        
+            if (currentSavedNews.length !== 0) {
+                
+                setNoNews(false)
+                setSavedNewsFound(true)
+          } else {
+            setSearching(false)
+            setSavedNewsFound(false)
+            return
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    }
     
-    // const tokenCheck = () => {
-    //     const jwt = getToken();
-    //     if (!jwt) {
-    //     return;
-    //     }
-    //     auth.getContent(jwt).then((res) => {
+    const tokenCheck = () => {
+        const jwt = getToken();
+        if (!jwt) {
+        return;
+        }
+        mainApi.getContent(jwt).then((res) => {
             
-    //     if (res.email) {
-    //         const userData = { 
-    //         email: res.email,
-    //         }
-    //         setLoggedIn(true);
-    //         setUserData(userData);
-    //         history.push('/')
+        if (res.email) {
+            const userData = { 
+                name: res.name,   
+            email: res.email
+            }
+            setUserData(userData)
+        }
+        const localNews = getCards()
+        if (localNews !== null) {
+            handlSearch(localNews)
+            
+            setLoggedIn(true)
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+        
 
-    //             Promise.all([
-    //                 api.getProfile(),
-    //                 api.getInitialCards()
-    //             ]).then(res => {
-    //                 const [profile, card] = res
-    //                 setCurrentUser(profile)
-    //                 setCurrentCards(card)
-    //             }).catch((err) => {
-    //                 console.log(err);
-    //             })
+    }
 
-    //     }
-    //     })
-
-    //     .catch((err) => {
-    //         console.log(err);
-    //     })
-    // }
-
-    // const signOut = () => {
-    //     localStorage.removeItem('jwt');
-    //     setLoggedIn(false);
-    //     history.push('/signin');
-    // }
+    const signOut = () => {
+        localStorage.removeItem('jwt');
+        localStorage.removeItem('keyword');
+        setLoggedIn(false);
+        history.push('/')
+        handleLocation();
+    }
     
-    //     useEffect(() => {
+    useEffect(() => {
+    tokenCheck();
+    showSavedNews();
+    }, []); 
 
-    //             tokenCheck();
 
-    // }, []);
-
-    const [isAcceptPopupOpen,
-        setIsAcceptPopupOpen] = React.useState(false);
     const [isRegistrPopupOpen,
         setIsRegistrPopupOpen] = React.useState(false);
     const [isLoginPopupOpen,
         setIsLoginPopupOpen] = React.useState(false);
-    const [isTrashOpen,
-        setIsTrashOpen] = React.useState(false);
     const [isTooltipOpen,
             setTooltipOpen] = React.useState(false);
-    const [isSelectedCard,
-        setIsSelectedCard] = React.useState()
-    const [currentUser,
-        setCurrentUser] = React.useState({})
-    const [currentCards,
-        setCurrentCards] = React.useState([])
+    const [showNews,
+              setShowNews] = React.useState(3);
+    const [keyword, setKeyword] = useState('');
+    const [currentSavedNews,
+        setCurrentSavedNews] = React.useState([])
+    const [currentNews,
+        setCurrentNews] = React.useState([])
 
 
     
-    // const handleCardLike = (card) => {
-    //     const isLiked = card.likes.some(i => i === currentUser._id);
-    //     if (!isLiked) {
-    //         api.addLike(card._id)
-    //             .then((newCard) => {
-    //                 const newCards = currentCards.map(c => c._id === card._id
-    //                     ? newCard
-    //                     : c);
-    //                 setCurrentCards(newCards);
-    //             })
-    //             .catch((err) => {
-    //                 console.log(err);
-    //             });
-    //     } else {
-    //         api.unLike(card._id)
-    //             .then((newCard) => {
-                    
-    //                 const newCards = currentCards.map(c => c._id === card._id
-    //                     ? newCard
-    //                     : c);
-    //                 setCurrentCards(newCards);
-    //             })
-    //             .catch((err) => {
-    //                 console.log(err);
-    //             });
-    //     }
-    // }
+    const handleSaveNews = (card) => {
 
-    // const handleDeleteCard = (card) => {
+        if (!loggedIn) {
+            handleRegistrPopupClick()
+        }
+        const isSaved = currentSavedNews.find((elem) => elem.link === card.url);
 
-    //     api
-    //         .deleteCard(card._id)
-    //         .then(res => {
-    //             const deletedCard = currentCards.filter(el => el._id !== card._id)
-    //             setCurrentCards(deletedCard);
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         });
-    // }
+        if (!isSaved) {
+          const jwt = getToken();
+          if (!jwt) {
+          return;
+        }
 
-    function handleAcceptPopupClick() {
-    closeAllPopups()
-    setIsAcceptPopupOpen(true)
+        mainApi.saveNews(card, jwt)
+        .catch((err) => {
+                console.log(err);
+            })
+
+        mainApi.getSavedNews(jwt)
+                .then(res => {                    
+                    setCurrentSavedNews(res)
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+            
+        } else {
+          handleDeleteCard(isSaved)
+        }
+    }
+
+    const handleDeleteCard = (card) => {
+const jwt = getToken()
+if (!jwt) {
+    return;
+    }
+        mainApi.deleteNews(card._id, jwt)
+            .then(res => {
+                const deletedCard = currentSavedNews.filter(el => el._id !== card._id)
+                setCurrentSavedNews(deletedCard)
+                if ( currentSavedNews.length <= 1 && location === '/saved-news' ) {
+                  setSavedNewsFound(false)
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     function handleRegistrPopupClick() {
@@ -162,19 +187,12 @@ const App = () => {
     setIsLoginPopupOpen(true)
     }
 
-    // function handleTrashClick() {
-    //     setIsTrashOpen(true)
-    // }
+    function handleTooltip() {
+        closeAllPopups()
+        setTooltipOpen(true)
+    }
 
-    // const handleCardClick = (card) => {
-    //     setIsSelectedCard(card)
-    // }
-
-    // function handleTooltip() {
-    //     setTooltipOpen(true)
-    // }
-
-    function handleLocation() {
+    const handleLocation = () => {
     const location = window.location.pathname
     if (location === '/')
         setLocation(location)
@@ -187,105 +205,102 @@ const App = () => {
         else setInput(true)
     }
 
-    function handleRegister(e) {
-    e.preventDefault();
-    closeAllPopups()
-    handleAcceptPopupClick()
-    }
-
     function closeAllPopups() {
-    setIsAcceptPopupOpen(false)
+        setTooltipOpen(false)
     setIsRegistrPopupOpen(false)
     setIsLoginPopupOpen(false)
-        // setIsTrashOpen(false)
-        // setTooltipOpen(false)
-        // setIsSelectedCard()
     }
 
-    // function handleUpdateUser({name, about}) {
-    //     api.setProfile(name, about)
-    //         .then(res => {
-    //             setCurrentUser(res)
-    //             closeAllPopups();
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         })
-    // }
-
-    // const handleUpdateAvatar = ({avatar}) => {
-    //     api.profileAvatar(avatar)
-    //         .then(res => {
-    //             setCurrentUser(res)
-    //             closeAllPopups();
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         })
-    // }
-
-    // const handleAddPlaceSubmit = ({place, link}) => {
-    //     api.setCard(place, link )
-    //         .then(res => {
-    //             setCurrentCards([
-    //                 res, ...currentCards
-    //             ])
-    //             closeAllPopups();
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         })
-        
-    // }
-
-    // const handlRegister = (email, password) => {
-
-    //     auth.register(email, password)
-    //         .then((res) => {
-
-    //             if ((res.status !== 401) && (res.status !== 400 ) && (res.status !== 409 )) {
-    //                 history.push('/signin') 
-    //             } else handleTooltip();
-    //         })
-    //         .catch((err) => {
-    //             console.log(err)
-    //             handleTooltip();
-    //             history.push('/signup');
-    //         });
-    // }
-
-    // const handlAuthorize = (data) => {
-    //     const { email, password } = data;
-
-    //     if (!email || !password){
-    //         handleTooltip()
-    //         return;
-    //     }
-
-    //     auth.authorize(email, password)
-    //         .then((res) => {
-    //             if (!res){
-    //                 handleTooltip()
-    //             }
+const handlSearch = (search) => {
     
-    //             if (res.token) {
-    //             setToken(res.token);
-    //             //setData({ email: '', password: ''});
-    //             handleLogin(data);
-    //             history.push('/');
-    //             }
-    //             else handleTooltip()
-    //         })
-    //         .then(() => tokenCheck())
-    //         .catch(err => {
-    //             handleTooltip()
-    //             console.log(err)
-    //         });
-    // }
+  setShowNews(3)
+  setNewsFound(false)
+  setSavedNewsFound(false)
+  setNoNews(false)
+  setNews(true)
+  setSearching(true)
+  newsApi.getNews(search)
+  .then((res) => {
+    if (res.articles.length !== 0) {
+      setKeyword(search)
+      setSearching(false)
+      setNoNews(false)
+      setCurrentNews(res.articles)
+      setCards(search)
+      setSavedNewsFound(true)
+      setNewsFound(true)
+} else {
+    setSearching(false)
+    setSavedNewsFound(false)
+    setNewsFound(false)
+    setNoNews(true)
+    setNews(true)
+  }
+    
+})
+.catch((err) => {
+    console.log(err)
+});
+}
+
+
+const showMore = () => {
+  const showPerClick = 3;
+  let show = showNews
+  const hidden = document.querySelectorAll('.hidden');
+  for (let i = 0; i < showPerClick; i++) {
+    if (!hidden[i]) return
+    hidden[i].classList.remove('hidden');
+}
+let newNumber = show + showPerClick
+setShowNews(newNumber)
+}
+
+
+    const handlRegister = (email, password, name) => {
+
+        mainApi.register(email, password, name)
+            .then((res) => {
+
+                if ((res.status !== 401) && (res.status !== 400 ) && (res.status !== 409 )) {
+                  handleTooltip()
+                    history.push('/') 
+                } else return
+            })
+            .catch((err) => {
+                console.log(err)
+            });
+    }
+
+    const handlAuthorize = (data) => {
+        const { email, password } = data;
+
+        if (!email || !password){
+            return;
+        }
+
+        mainApi.authorize(email, password)
+            .then((res) => {
+                if (!res){
+                    return
+                }
+    
+                if (res.token) {
+                setToken(res.token);
+                //setData({ email: '', password: ''});
+                handleLogin(data, res.token);
+                // history.push('/');
+                }
+            })
+            .then(() => tokenCheck())
+            .catch(err => {
+                console.log(err)
+            });
+    }
 
     return (
-        <CurrentCardContext.Provider value={currentCards}>
-            <CurrentUserContext.Provider value={currentUser}>
+        <CurrentNewsContext.Provider value={currentNews}>
+            <CurrentSavedNewsContext.Provider value={currentSavedNews}>
                 <>
                     
                     <Header 
@@ -294,21 +309,44 @@ const App = () => {
                     handleLocation={handleLocation}
                     onLoginPopup={handleLoginPopupClick}
                     handleCheck={handleCheck}
+                    signOut={signOut}
                     checked={input}
-                    name="Грета" />
+                    userData={userData}
+                    showSavedNews={showSavedNews} />
                     <main>
                     <Switch>
 
                     <ProtectedRoute 
+                    handleLoginPopupClick={handleLoginPopupClick}
                     path="/saved-news"
                     loggedIn={loggedIn}
+                    location={location}
                     component={SavedNews} 
-                    link="" />
+                    userData={userData}
+                    link="" 
+                    handleDeleteCard={handleDeleteCard}
+                    showMore={showMore}
+                    savedNewsFound={savedNewsFound}
+                    />
 
                     <Route path="/">                    
-                    <SearchForm />
-                    <NewsCardList />
-                    <About />
+                    <SearchForm
+                    handlSearch={handlSearch} />
+                    <NewsCardList
+                    handleRegistrPopupClick={handleRegistrPopupClick}
+                    showNews={showNews}
+                    news={news}
+                    loggedIn={loggedIn}
+                    location={location} 
+                    keyword={keyword}
+                    handleSaveNews={handleSaveNews}
+                    showMore={showMore}
+                    searching={searching}
+                    newsFound={newsFound}
+                    noNews={noNews}
+                    />
+                    <About 
+                    userData={userData} />
                     </Route>
                     <Route>
                         {loggedIn && <Redirect to="/" /> }
@@ -320,11 +358,13 @@ const App = () => {
                         title="Пользователь успешно зарегистрирован!"
                         id="accept"
                         afterLink="Войти"
-                        isOpen={isAcceptPopupOpen}
+                        isOpen={isTooltipOpen}
                         isClose={closeAllPopups}
+                        loggedIn={loggedIn}
                         handleAfterLink={handleLoginPopupClick} />
 
                     <RegistrPopup
+                        
                         title="Регистрация"
                         id="registr"
                         afterLink="Войти"
@@ -333,9 +373,10 @@ const App = () => {
                         isOpen={isRegistrPopupOpen}
                         isClose={closeAllPopups}
                         handleAfterLink={handleLoginPopupClick}
-                        onRegister={handleRegister} />
+                        handlRegister={handlRegister} />
                         
                     <LoginPopup
+                        
                         title="Вход"
                         id="login"
                         afterLink="Зарегистрироваться"
@@ -344,13 +385,13 @@ const App = () => {
                         isOpen={isLoginPopupOpen}
                         isClose={closeAllPopups}
                         handleAfterLink={handleRegistrPopupClick}
-                        onRegister={handleRegister}
+                        handlAuthorize={handlAuthorize}
                         />
                     <Footer 
                     handleLocation={handleLocation}/>
                 </>
-            </CurrentUserContext.Provider>
-        </CurrentCardContext.Provider>
+            </CurrentSavedNewsContext.Provider>
+        </CurrentNewsContext.Provider>
 
     );
 }

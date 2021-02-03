@@ -2,7 +2,7 @@ import React from 'react';
 import avatar from '../../images/jpg/girl.jpg';
 import './About.css'
 
-const About = () => {
+const About = (props) => {
     return (
 <section className="about">
     <img src={avatar} alt="" className="about__pic" />
